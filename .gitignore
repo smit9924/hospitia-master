@@ -1,3 +1,8 @@
 # Ignore nginx log file
 .devcontainer/nginx/logs
+
+# Ignore environment file
 .env
+
+# Ignore postgresql data directory
+.devcontainer/postgres/data

@@ -2,6 +2,7 @@
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "workspace",
 	"workspaceFolder": "/workspace",
+	"initializeCommand": "bash ./.devcontainer/devcontainer-init.sh",
 	"customizations": {
 	  "vscode": {
 		"extensions": [
