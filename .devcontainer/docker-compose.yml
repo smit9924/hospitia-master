@@ -18,6 +18,7 @@ services:
     postgres:
         container_name: ${project_name}-postgres
         image: postgres:17.0-bullseye
+        hostname: ${project_name}-postgres-host
         restart: always
         ports:
             - 5432:5432
