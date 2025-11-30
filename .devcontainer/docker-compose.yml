@@ -14,6 +14,8 @@ services:
               required: true
             - path: ./override.env
               required: false
+        networks:
+            - dev-net
 
     postgres:
         container_name: ${project_name}-postgres
