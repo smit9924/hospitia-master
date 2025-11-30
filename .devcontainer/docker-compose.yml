@@ -37,6 +37,28 @@ services:
         networks:
             - dev-net
 
+    pgadmin:
+        container_name: ${project_name}-pgadmin
+        image: dpage/pgadmin4:latest
+        hostname: ${project_name}-pgadmin-host
+        ports:
+          - "8080:80"
+        depends_on:
+          - postgres
+        volumes:
+          - ./postgres/servers.json:/pgadmin4/servers.json
+        env_file:
+            - path: "./postgres/.default_db_config.env"
+              required: true
+            - path: "./postgres/.override_db_config.env"
+              required: false
+            - path: ./.env
+              required: true
+            - path: ./override.env
+              required: false
+        networks:
+            - dev-net
+
 networks:
     dev-net:
         external: true
