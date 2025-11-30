@@ -1,7 +1,6 @@
 {
     "npm.autoDetect": "off",
     "typescript.tsc.autoDetect": "off",
-
     "python.defaultInterpreterPath": "/workspace/backend/services/auth/.venv/bin/python3.13",
     "python.analysis.extraPaths": [
         "/workspace/backend/services/auth/.venv/lib/python3.13/site-packages"
@@ -11,5 +10,6 @@
     "python.analysis.indexing": true,
     "python.analysis.diagnosticMode": "workspace",
     "python.analysis.displayEnglishDiagnostics": true,
-    "python.analysis.typeCheckingMode": "standard"
+    "python.analysis.typeCheckingMode": "standard",
+    "python.terminal.activateEnvironment": false
 }
