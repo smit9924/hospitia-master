@@ -35,6 +35,34 @@
             "options": {
                 "cwd": "${workspaceFolder}/backend/services/auth"
             }
+        },
+        {
+            "label": "Make migrations : auth",
+            "type": "process",
+            "isBackground": true,
+            "command": "bash",
+            "args": [
+                "create_migration.sh",
+                "auth",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend/scripts"
+            }
+        },
+        {
+            "label": "Migrate : auth",
+            "type": "process",
+            "isBackground": true,
+            "command": "uv",
+            "args": [
+                "run",
+                "alembic",
+                "upgrade",
+                "head"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend/services/auth/auth/database"
+            }
         }
     ]
 }
