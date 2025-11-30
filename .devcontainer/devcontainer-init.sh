@@ -13,3 +13,8 @@ else
     echo "Network '$NETWORK_NAME' created successfully."
 fi
 # end docker network creation
+
+
+# Whitelist the frontend and backend repositories
+# to prevent Git from prompting for trust each time the devcontainer is rebuilt.
+git config --global --add safe.directory /workspace/frontend && git config --global --add safe.directory /workspace/backend
