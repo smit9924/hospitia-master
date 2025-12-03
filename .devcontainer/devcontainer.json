@@ -11,7 +11,8 @@
 			"christian-kohler.path-intellisense",
 			"ms-python.python",
 			"shardulm94.trailing-spaces",
-			"redhat.vscode-yaml"
+			"redhat.vscode-yaml",
+			"bierner.markdown-mermaid"
 		]
 	  }
 	},
