@@ -63,6 +63,37 @@
             "options": {
                 "cwd": "${workspaceFolder}/backend/services/auth/auth/database"
             }
+        },
+        {
+            "label": "Lint : auth (ruff check)",
+            "type": "process",
+            "isBackground": true,
+            "command": "uv",
+            "args": [
+                "run",
+                "ruff",
+                "check",
+                "."
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend/services/auth/auth/"
+            }
+        },
+        {
+            "label": "Lint : auth (ruff check --fix)",
+            "type": "process",
+            "isBackground": true,
+            "command": "uv",
+            "args": [
+                "run",
+                "ruff",
+                "check",
+                "--fix",
+                "."
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend/services/auth/auth/"
+            }
         }
     ]
 }
