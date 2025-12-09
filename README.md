@@ -6,30 +6,11 @@
 2. **VS Code** - Download and install [Visual Studio Code](https://code.visualstudio.com/).
 3. **Docker & Docker Compose** - Ensure [Docker and Docker Compose](https://docs.docker.com/engine/install/ubuntu/) are installed. Windows users must install Docker within WSL2.
 4. **Git** - Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) for version control.
-5. **PgAdmin4** - Install [PgAdmin4](https://www.pgadmin.org/download/) on your system to connect to the database and access a user-friendly interface for managing database operations
 
-### SSH Key Setup for GitHub
-
-To simplify interactions with GitHub, set up SSH keys:
-
-1. Open a terminal in WSL2.
-2. Generate a new SSH key:
-   ```bash
-   ssh-keygen -t rsa
-   ```
-   Note: Make sure you are storing ssh keys in default file namely id_rsa and id_rsa.pub.
-3. To copy the public part of your SSH key, run the following command:
-   ```bash
-   cat ~/.ssh/id_rsa.pub
-   ```
-4. Add the SSH Key to Your GitHub Account
-
-    1. Log into your GitHub account and navigate to **Profile** → **Settings** → **SSH and GPG Keys**.
-    2. Click on **New SSH Key** and paste the public key that you copied earlier.
-    3. For detailed instructions, refer to the [official GitHub documentation on adding SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
-
-    
-Note: If you already have rsa key generated and linked with github account then there is no need to repeat this step.
+5. **Access:** - Make sure you have proper access to the following required repositories:
+   - [angular-fastapi-template-master](https://github.com/smit9924/angular-fastapi-template-master)
+   - [angular-fastapi-template-frontend](https://github.com/smit9924/angular-fastapi-template-frontend)
+   - [angular-fastapi-template-backend](https://github.com/smit9924/angular-fastapi-template-backend)
 
 ## Setting up the Project
 
@@ -46,9 +27,9 @@ Note: If you already have rsa key generated and linked with github account then 
 3. **Clone Repositories**
    - Clone the required repositories by running the following commands inside the `Project` directory:
      ```bash
-     git clone git@github.com:smit9924/planoluxe.git .
-     git clone git@github.com:smit9924/planoluxe-client.git
-     git clone git@github.com:smit9924/planoluxe-services.git
+     git clone https://github.com/smit9924/angular-fastapi-template-master .
+     git clone https://github.com/smit9924/angular-fastapi-template-frontend
+     git clone https://github.com/smit9924/angular-fastapi-template-backend
      ```
 
 4. **Run Initial Setup Script**
@@ -67,28 +48,19 @@ Note: If you already have rsa key generated and linked with github account then 
 
 You’re now ready to start working on the project!
 
-## Connect to the Database Server Using PgAdmin4
+## Accessing PgAdmin4 in the Development Setup
 
-After setting up the project on your local machine and ensuring all containers are running, you may need to connect to your PostgreSQL database server via PgAdmin4 to perform database operations. Follow these steps to connect to the database server with PgAdmin4:
+PgAdmin4 is already running as part of the development environment. To access it:
 
-1. **Open PgAdmin4**:  
-   On the initial screen, click on the option **"Add New Server"** to connect with your database server.
+1. **Open PgAdmin4**:
+   - In your browser, go to [http://localhost:8080](http://localhost:8080).
 
-2. **Configure the Server**:  
-   A popup with multiple tabs will appear.
+2. **Login Credentials**:
+   - **Email**: `developer@domain.com`
+   - **Password**: `password`
 
-   - **General Tab**:
-     Fill following details in Connection tab:
-     - **Name**: `planoluxe-db`.
+Once logged in, you will already be connected to the database server and can view the available databases and their schemas.
 
-   - **Connection Tab**:  
-     Fill following details in Connection tab:
-     - **Host name/address**: `127.0.0.1`
-     - **Port**: `5432`
-     - **Username**: `postgres`
-     - **Password**: `password`
-
-3. **Save**:  
-   Click the **Save** button at the bottom-right corner of the popup. You will be redirected to the dashboard.
+> **Note:** If prompted for a password, enter `password`.
 
 You’re now ready to visualize data and perform DB operation using PgAdmin4!
