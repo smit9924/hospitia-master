@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debug: Auth",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "auth.main:app",
+                "--reload"
+            ],
+            "cwd": "${workspaceFolder}/backend/services/auth",
+            "python": "${workspaceFolder}/backend/services/auth/.venv/bin/python3.13",
+            "jinja": true
+        }
+    ]
+}
