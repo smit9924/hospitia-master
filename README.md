@@ -20,22 +20,24 @@
 2. **Create Project Directory**
    - Create a new directory for the project:
      ```bash
-     mkdir Project
-     cd Project
+     $ mkdir Project
+     $ cd Project
      ```
 
 3. **Clone Repositories**
    - Clone the required repositories by running the following commands inside the `Project` directory:
      ```bash
-     git clone https://github.com/smit9924/angular-fastapi-template-master .
-     git clone https://github.com/smit9924/angular-fastapi-template-frontend
-     git clone https://github.com/smit9924/angular-fastapi-template-backend
+     $ git clone https://github.com/smit9924/angular-fastapi-template-master .
+     $ mkdir frontend
+     $ git clone https://github.com/smit9924/angular-fastapi-template-frontend ./frontend/.
+     $ mkdir backend
+     $ git clone https://github.com/smit9924/angular-fastapi-template-backend ./backend/.
      ```
 
 4. **Run Initial Setup Script**
    - To install and configure necessary dependencies, execute the `initialSetup.sh` script:
      ```bash
-     bash ./initialSetup.sh
+     $ bash ./initialSetup.sh
      ```
 
 5. **Open Project in VS Code**
