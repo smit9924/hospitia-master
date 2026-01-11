@@ -2,13 +2,13 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "sso-client",
+            "label": "main-client",
             "type": "process",
             "isBackground": true,
             "command": "npm",
             "args": ["run", "jit"],
             "options": {
-                "cwd": "${workspaceFolder}/sso-client/client"
+                "cwd": "${workspaceFolder}/frontend/clients/main"
             }
         },
         {
