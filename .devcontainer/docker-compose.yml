@@ -61,9 +61,34 @@ services:
         networks:
             - dev-net
 
+    rabbitmq:
+        container_name: ${project_name}-rabbitmq
+        image: rabbitmq:3.13-management
+        hostname: ${project_name}-rabbitmq
+        ports:
+          - "5672:5672" #for rabbitmq server
+          - "15672:15672" #for rabbitmq management UI
+        volumes:
+          - rabbitmq-data:/var/lib/rabbitmq
+        networks:
+          - dev-net
+
+    notification-service:
+      container_name: ${project_name}-notification
+      build:
+        context: ../sso-services/services/notification
+      depends_on:
+        - rabbitmq
+      env_file:
+        - path: ./.env
+          required: true
+      networks:
+        - dev-net
+
 networks:
     dev-net:
         external: true
 
 volumes:
     postgres:
+    rabbitmq-data:
