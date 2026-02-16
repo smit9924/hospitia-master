@@ -12,6 +12,26 @@
             }
         },
         {
+            "label": "Lint : main-client (eslint)",
+            "type": "process",
+            "isBackground": true,
+            "command": "npm",
+            "args": ["run", "lint"],
+            "options": {
+                "cwd": "${workspaceFolder}/frontend/clients/main"
+            }
+        },
+        {
+            "label": "Lint : main-client (eslint --fix)",
+            "type": "process",
+            "isBackground": true,
+            "command": "npm",
+            "args": ["run", "lint-fix"],
+            "options": {
+                "cwd": "${workspaceFolder}/frontend/clients/main"
+            }
+        },
+        {
             "label": "install depentencies",
             "type": "process",
             "isBackground": true,
