@@ -73,18 +73,6 @@ services:
         networks:
           - dev-net
 
-    notification-service:
-      container_name: ${project_name}-notification
-      build:
-        context: ../sso-services/services/notification
-      depends_on:
-        - rabbitmq
-      env_file:
-        - path: ./.env
-          required: true
-      networks:
-        - dev-net
-
 networks:
     dev-net:
         external: true

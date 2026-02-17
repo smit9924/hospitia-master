@@ -94,6 +94,21 @@
             "options": {
                 "cwd": "${workspaceFolder}/backend/services/auth/auth/"
             }
-        }
+        },
+        {
+            "label": "service : notification",
+            "type": "process",
+            "isBackground": true,
+            "command": "uv",
+            "args": [
+                "run",
+                "python",
+                "-m",
+                "notification.main"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend/services/notification"
+            }
+        },
     ]
 }
