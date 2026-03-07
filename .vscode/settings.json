@@ -11,6 +11,5 @@
     "python.analysis.diagnosticMode": "workspace",
     "python.analysis.displayEnglishDiagnostics": true,
     "python.analysis.typeCheckingMode": "standard",
-    "python.terminal.activateEnvironment": false,
-    "python-envs.pythonProjects": []
+    "python.terminal.activateEnvironment": false
 }
