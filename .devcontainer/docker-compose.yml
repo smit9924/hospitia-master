@@ -70,6 +70,11 @@ services:
           - "15672:15672" #for rabbitmq management UI
         volumes:
           - rabbitmq-data:/var/lib/rabbitmq
+        env_file:
+          - path: ./.env
+            required: true
+          - path: ./override.env
+            required: false
         networks:
           - dev-net
 
