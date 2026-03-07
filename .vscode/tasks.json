@@ -124,6 +124,52 @@
             "options": {
                 "cwd": "${workspaceFolder}/backend/services/auth/auth/"
             }
+        },
+        {
+            "label": "service : notification",
+            "type": "process",
+            "isBackground": true,
+            "command": "uv",
+            "args": [
+                "run",
+                "python",
+                "-m",
+                "notification.main"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend/services/notification"
+            }
+        },
+        {
+            "label": "Lint : notification (ruff check)",
+            "type": "process",
+            "isBackground": true,
+            "command": "uv",
+            "args": [
+                "run",
+                "ruff",
+                "check",
+                "."
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend/services/notification/notification/"
+            }
+        },
+        {
+            "label": "Lint : notification (ruff check --fix)",
+            "type": "process",
+            "isBackground": true,
+            "command": "uv",
+            "args": [
+                "run",
+                "ruff",
+                "check",
+                "--fix",
+                "."
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend/services/notification/notification/"
+            }
         }
     ]
 }
