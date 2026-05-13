@@ -42,6 +42,16 @@
             }
         },
         {
+            "label": "i18n : main-client (ng extract-i18n)",
+            "type": "process",
+            "isBackground": true,
+            "command": "npm",
+            "args": ["run", "ng", "extract-i18n"],
+            "options": {
+                "cwd": "${workspaceFolder}/frontend/clients/main"
+            }
+        },
+        {
             "label": "install depentencies",
             "type": "process",
             "isBackground": true,
