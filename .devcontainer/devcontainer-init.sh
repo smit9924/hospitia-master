@@ -17,4 +17,9 @@ fi
 
 # Whitelist the frontend and backend repositories
 # to prevent Git from prompting for trust each time the devcontainer is rebuilt.
-git config --global --add safe.directory /workspace/frontend && git config --global --add safe.directory /workspace/backend
+git config --global --add safe.directory /workspace/ && git config --global --add safe.directory /workspace/frontend && git config --global --add safe.directory /workspace/backend
+
+# Create .env files from .sample.env files
+cp backend/services/auth/.sample.env backend/services/auth/.env
+cp backend/services/notification/.sample.env backend/services/notification/.env
+
