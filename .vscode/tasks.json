@@ -52,13 +52,13 @@
             }
         },
         {
-            "label": "install depentencies",
+            "label": "install dependencies",
             "type": "process",
             "isBackground": true,
             "command": "bash",
             "args": [
                 "-c",
-                "cd ${workspaceFolder}/backend/services/auth && uv sync && cd ${workspaceFolder}/frontend/clients/client && npm install"
+                "cd ${workspaceFolder}/backend/services/auth && uv sync && cd ${workspaceFolder}/backend/services/notification && uv sync && cd ${workspaceFolder}/frontend/clients/main && npm install"
             ]
         },
         {
@@ -142,9 +142,9 @@
             "command": "uv",
             "args": [
                 "run",
-                "python",
-                "-m",
-                "notification.main"
+                "fastapi",
+                "dev",
+                "notification/main.py"
             ],
             "options": {
                 "cwd": "${workspaceFolder}/backend/services/notification"
