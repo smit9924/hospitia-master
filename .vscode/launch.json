@@ -8,10 +8,27 @@
             "module": "uvicorn",
             "args": [
                 "auth.main:app",
-                "--reload"
+                "--reload",
+                "--port",
+                "8000"
             ],
             "cwd": "${workspaceFolder}/backend/services/auth",
             "python": "${workspaceFolder}/backend/services/auth/.venv/bin/python3.13",
+            "jinja": true
+        },
+        {
+            "name": "Python Debug: Notification",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "notification.main:app",
+                "--reload",
+                "--port",
+                "8002"
+            ],
+            "cwd": "${workspaceFolder}/backend/services/notification",
+            "python": "${workspaceFolder}/backend/services/notification/.venv/bin/python3.13",
             "jinja": true
         }
     ]
