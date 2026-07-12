@@ -70,6 +70,8 @@
                 "run",
                 "fastapi",
                 "dev",
+                "--port",
+                "8000",
                 "auth/main.py"
             ],
             "options": {
@@ -144,6 +146,8 @@
                 "run",
                 "fastapi",
                 "dev",
+                "--port",
+                "8002",
                 "notification/main.py"
             ],
             "options": {
