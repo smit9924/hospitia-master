@@ -1,0 +1,35 @@
+services:
+  jenkins:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: hospitia-jenkins
+
+    restart: on-failure
+
+    ports:
+      - "9000:8080"
+      - "50000:50000"
+
+    env_file:
+      - path: ./.env
+        required: true
+
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - ./casc:/var/jenkins_home/casc:ro
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl --fail http://localhost:9000/login || exit 1"
+        ]
+      interval: 30s
+      timeout: 8s
+      retries: 8
+      start_period: 120s
+
+volumes:
+  jenkins_home:

@@ -1,0 +1,64 @@
+###############################################################################
+# Jenkins Configuration as Code
+###############################################################################
+configuration-as-code           # Configuration as Code
+
+###############################################################################
+# Pipeline
+###############################################################################
+workflow-aggregator             # Pipeline
+pipeline-stage-view             # Pipeline Stage View
+pipeline-graph-view             # Pipeline Graph View
+pipeline-utility-steps          # Pipeline Utility Steps
+
+###############################################################################
+# Source Control Management (SCM)
+###############################################################################
+git                            # Git Plugin
+git-client                     # Git Client Plugin
+github                         # GitHub Plugin
+github-branch-source           # GitHub Branch Source
+scm-api                        # SCM API
+
+###############################################################################
+# Credentials & Security
+###############################################################################
+credentials                    # Credentials
+credentials-binding            # Credentials Binding Plugin
+plain-credentials              # Plain Credentials Plugin
+ssh-credentials                # SSH Credentials Plugin
+ssh-agent                      # SSH Agent Plugin
+matrix-auth                    # Matrix Authorization Strategy
+antisamy-markup-formatter      # OWASP Markup Formatter
+
+###############################################################################
+# Docker
+###############################################################################
+docker-workflow                # Docker Pipeline
+docker-java-api                     # Docker API
+docker-commons                 # Docker Commons
+
+###############################################################################
+# Job Management
+###############################################################################
+job-dsl                        # Job DSL
+cloudbees-folder               # Folders Plugin
+
+###############################################################################
+# Build Utilities
+###############################################################################
+ws-cleanup                     # Workspace Cleanup
+build-timeout                  # Build Timeout
+timestamper                    # Timestamper
+ansicolor                      # ANSI Color
+
+###############################################################################
+# Notifications
+###############################################################################
+mailer                         # Mailer Plugin
+email-ext                      # Email Extension
+
+###############################################################################
+# UI
+###############################################################################
+dark-theme                     # Dark Theme
