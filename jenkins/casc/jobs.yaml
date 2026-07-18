@@ -1,0 +1,2 @@
+jobs:
+  - file: /var/jenkins_home/job-dsl/folders.groovy
