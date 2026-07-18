@@ -1,0 +1,10 @@
+jenkins:
+  systemMessage: |
+    Jenkins managed by Configuration as Code.
+    Manual configuration is discouraged.
+
+  numExecutors: 2
+
+  scmCheckoutRetryCount: 2
+
+  slaveAgentPort: 50000
