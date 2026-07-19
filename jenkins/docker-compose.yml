@@ -8,6 +8,8 @@ services:
 
     restart: on-failure
 
+    user: root # Run as root to allow Docker commands inside the container (slightly discouraged for security reasons)
+
     ports:
       - "9000:8080"
       - "50000:50000"
@@ -20,6 +22,7 @@ services:
       - jenkins_home:/var/jenkins_home
       - ./casc:/var/jenkins_home/casc:ro
       - ./job-dsl:/var/jenkins_home/job-dsl:ro
+      - /var/run/docker.sock:/var/run/docker.sock # enable docker-in-docker for jenkins to run docker commands
 
     healthcheck:
       test:

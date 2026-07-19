@@ -1,0 +1,35 @@
+jenkins:
+  clouds:
+    - docker:
+        name: docker
+
+        containerCap: 4
+
+        dockerApi:
+          dockerHost:
+            uri: "unix:///var/run/docker.sock"
+
+        templates:
+          - name: node
+            labelString: docker-agent-node
+            mode: EXCLUSIVE
+            remoteFs: /home/jenkins/agent
+
+            dockerTemplateBase:
+              image: smit9924/hospitia-jenkins-agent:node-latest
+
+            connector:
+              attach:
+                user: "jenkins"
+
+          - name: python
+            labelString: docker-agent-python
+            mode: EXCLUSIVE
+            remoteFs: /home/jenkins/agent
+
+            dockerTemplateBase:
+              image: smit9924/hospitia-jenkins-agent:python-latest
+
+            connector:
+              attach:
+                user: "jenkins"
