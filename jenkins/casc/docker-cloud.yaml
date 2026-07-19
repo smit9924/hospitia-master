@@ -17,10 +17,12 @@ jenkins:
 
             dockerTemplateBase:
               image: smit9924/hospitia-jenkins-agent:node-latest
+              mounts:
+                - "type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock"
 
             connector:
               attach:
-                user: "jenkins"
+                user: "root"
 
           - name: python
             labelString: docker-agent-python
@@ -29,7 +31,9 @@ jenkins:
 
             dockerTemplateBase:
               image: smit9924/hospitia-jenkins-agent:python-latest
+              mounts:
+                - "type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock"
 
             connector:
               attach:
-                user: "jenkins"
+                user: "root"
