@@ -5,6 +5,8 @@ USER root
 ARG NODE_MAJOR=22
 ARG ANGULAR_VERSION=21
 
+ENV DOCKER_BUILDKIT=1
+
 # Install common utilities
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -26,11 +28,12 @@ RUN mkdir -p /etc/apt/keyrings && \
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
         > /etc/apt/sources.list.d/docker.list
 
-# Install Node.js and Docker CLI
+# Install Node.js, Docker CLI and Buildx
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         nodejs \
-        docker-ce-cli && \
+        docker-ce-cli \
+        docker-buildx-plugin && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -45,6 +48,7 @@ RUN java -version && \
     node --version && \
     npm --version && \
     ng version && \
-    docker --version
+    docker --version && \
+    docker buildx version
 
 USER jenkins
