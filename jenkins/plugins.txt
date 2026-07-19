@@ -35,8 +35,7 @@ antisamy-markup-formatter      # OWASP Markup Formatter
 # Docker
 ###############################################################################
 docker-workflow                # Docker Pipeline
-docker-java-api                     # Docker API
-docker-commons                 # Docker Commons
+docker-plugin                  # Docker cloud
 
 ###############################################################################
 # Job Management
