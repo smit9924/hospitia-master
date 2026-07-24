@@ -21,14 +21,20 @@ Ensure the following software is installed on the server before proceeding:
 
 ## Clone the Server Setup Directory
 
-Create a directory for the server setup and clone only the required `server-setup` folder from the repository using Git sparse checkout.
+Clone only the `server-setup` directory from the repository using Git sparse checkout.
 
 ```bash
-mkdir server-setup && cd server-setup
+mkdir hospitia-server-setup && cd hospitia-server-setup
 
 git clone --depth 1 --filter=blob:none --sparse git@github.com:smit9924/angular-fastapi-template-master.git .
 
 git sparse-checkout set server-setup
+```
+
+Navigate to the cloned `server-setup` directory before executing the remaining commands.
+
+```bash
+cd server-setup
 ```
 
 ---
@@ -45,6 +51,25 @@ Open the `.env` file and update all variables with values appropriate for your e
 
 ---
 
+## Create Docker Network
+
+All application containers (frontend, backend services, Nginx, etc.) must be connected to a common Docker network so they can communicate with each other using their container names.
+
+Create the network by running:
+
+```bash
+docker network create hospitia-network
+```
+
+If the network already exists, Docker will return an error similar to:
+
+```text
+Error response from daemon: network with name "hospitia-network" already exists
+```
+
+This is expected and can be safely ignored.
+
+
 ## Start the Infrastructure
 
 Run the following command to start the required infrastructure containers.
@@ -57,7 +82,7 @@ docker compose -f docker-compose.yml up -d
 
 ## Verify the Deployment
 
-Confirm that all containers are running successfully.
+Verify that all infrastructure containers are running successfully.
 
 ```bash
 docker compose ps
