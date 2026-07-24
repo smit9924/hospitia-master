@@ -23,6 +23,7 @@ services:
       - ./casc:/var/jenkins_home/casc:ro
       - ./job-dsl:/var/jenkins_home/job-dsl:ro
       - /var/run/docker.sock:/var/run/docker.sock # enable docker-in-docker for jenkins to run docker commands
+      - ~/.ssh:/root/.ssh:ro # Mount the host's SSH keys
 
     healthcheck:
       test:
