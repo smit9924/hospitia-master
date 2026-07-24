@@ -20,8 +20,9 @@ Before starting, ensure the following software is installed on the host machine:
 Clone the Jenkins infrastructure repository.
 
 ```bash
-git clone <repository-url>
-cd <repository-directory>
+mkdir server-setup && cd server-setup
+git clone --depth 1 --filter=blob:none --sparse git@github.com:smit9924/angular-fastapi-template-master.git .
+git sparse-checkout set jenkins
 ```
 
 ---
