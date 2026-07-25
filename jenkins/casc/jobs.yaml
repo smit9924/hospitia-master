@@ -2,3 +2,4 @@ jobs:
   - file: /var/jenkins_home/job-dsl/folders.groovy
   - file: /var/jenkins_home/job-dsl/frontend/main-client.groovy
   - file: /var/jenkins_home/job-dsl/backend/auth.groovy
+  - file: /var/jenkins_home/job-dsl/backend/notification.groovy
