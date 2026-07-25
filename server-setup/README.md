@@ -51,6 +51,28 @@ Open the `.env` file and update all variables with values appropriate for your e
 
 ---
 
+## Install SSL Certificate
+
+1. Create the directory to store your SSL certificates:
+
+   ```bash
+   mkdir -p ./nginx/ssl
+   ```
+
+2. Copy the following files into the `./nginx/ssl` directory:
+
+   - `ca_bundle.crt`
+   - `certificate.crt`
+   - `private.key`
+
+3. Nginx expects the server certificate and CA bundle to be provided as a single certificate chain file. Append the CA bundle to the server certificate by running:
+
+   ```bash
+   cat ./nginx/ssl/ca_bundle.crt >> ./nginx/ssl/certificate.crt
+   ```
+
+   After running this command, `certificate.crt` will contain both the server certificate and the complete certificate chain, which can be used in your Nginx configuration.
+
 ## Create Docker Network
 
 All application containers (frontend, backend services, Nginx, etc.) must be connected to a common Docker network so they can communicate with each other using their container names.
