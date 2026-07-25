@@ -53,10 +53,6 @@ services:
     container_name: hospitia-rabbitmq
     restart: on-failure
 
-    environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
-
     ports:
       - "5672:5672"
       - "15672:15672"
