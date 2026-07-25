@@ -4,6 +4,7 @@ final String JENKINSFILE = 'services/auth/jenkins/Jenkinsfile'
 
 final List<String> BRANCHES = [
     'main',
+    'feature/notification-service',
 ]
 
 pipelineJob('Backend/auth') {
