@@ -29,9 +29,9 @@ RUN mkdir -p /etc/apt/keyrings && \
 
 # Install Docker CLI
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends && \
-    docker-ce-cli && \
-    docker-buildx-plugin && \
+    apt-get install -y --no-install-recommends \
+        docker-ce-cli \
+        docker-buildx-plugin && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
