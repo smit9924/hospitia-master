@@ -51,27 +51,44 @@ Open the `.env` file and update all variables with values appropriate for your e
 
 ---
 
-## Install SSL Certificate
+## Install SSL Certificates
 
-1. Create the directory to store your SSL certificates:
+Each service is hosted on a different subdomain and requires its own SSL certificate. Create a dedicated directory for each service under `./nginx/ssl`:
 
-   ```bash
-   mkdir -p ./nginx/ssl
-   ```
+```bash
+mkdir -p ./nginx/ssl/main-client \
+         ./nginx/ssl/auth \
+         ./nginx/ssl/notification
+```
 
-2. Copy the following files into the `./nginx/ssl` directory:
+Copy the certificate files for each service into its respective directory. For example:
 
-   - `ca_bundle.crt`
-   - `certificate.crt`
-   - `private.key`
+```text
+nginx/
+└── ssl/
+    ├── main-client/
+    │   ├── ca_bundle.crt
+    │   ├── certificate.crt
+    │   └── private.key
+    ├── auth/
+    │   ├── ca_bundle.crt
+    │   ├── certificate.crt
+    │   └── private.key
+    └── notification/
+        ├── ca_bundle.crt
+        ├── certificate.crt
+        └── private.key
+```
 
-3. Nginx expects the server certificate and CA bundle to be provided as a single certificate chain file. Append the CA bundle to the server certificate by running:
+Nginx expects the server certificate and CA bundle to be provided as a single certificate chain file. For each service, append the CA bundle to the server certificate:
 
-   ```bash
-   cat ./nginx/ssl/ca_bundle.crt >> ./nginx/ssl/certificate.crt
-   ```
+```bash
+cat ./nginx/ssl/main-client/ca_bundle.crt >> ./nginx/ssl/main-client/certificate.crt
+cat ./nginx/ssl/auth/ca_bundle.crt >> ./nginx/ssl/auth/certificate.crt
+cat ./nginx/ssl/notification/ca_bundle.crt >> ./nginx/ssl/notification/certificate.crt
+```
 
-   After running this command, `certificate.crt` will contain both the server certificate and the complete certificate chain, which can be used in your Nginx configuration.
+After running these commands, each `certificate.crt` file will contain both the server certificate and the complete certificate chain, allowing it to be referenced directly in the corresponding Nginx server configuration.
 
 ## Create Docker Network
 
