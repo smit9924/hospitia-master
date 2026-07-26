@@ -17,7 +17,7 @@ services:
       - ./postgres/data:/var/lib/postgresql/data
 
       # Initialization scripts
-      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+      - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 
     networks:
       - hospitia-network
