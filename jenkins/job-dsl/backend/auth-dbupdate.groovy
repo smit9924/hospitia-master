@@ -1,6 +1,6 @@
 final String REPOSITORY_URL = 'https://github.com/smit9924/angular-fastapi-template-backend'
 final String CREDENTIALS_ID = 'github-token'
-final String JENKINSFILE = 'services/auth/jenkins/Database.Jenkinsfile'
+final String JENKINSFILE = 'services/auth/jenkins/Jenkinsfile.database'
 
 final List<String> BRANCHES = [
     'main',
