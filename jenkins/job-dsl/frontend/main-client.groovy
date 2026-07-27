@@ -20,8 +20,8 @@ pipelineJob('Frontend/main-client') {
     )
 
     logRotator {
-        daysToKeep(30)
-        numToKeep(20)
+        daysToKeep(1)
+        numToKeep(2)
     }
 
     parameters {
