@@ -1,6 +1,6 @@
 {
     "npm.autoDetect": "off",
-    "typescript.tsc.autoDetect": "off",
+    "js/ts.tsc.autoDetect": "off",
     "python.defaultInterpreterPath": "/workspace/backend/services/auth/.venv/bin/python3.13",
     "python.analysis.extraPaths": [
         "/workspace/backend/services/auth/.venv/lib/python3.13/site-packages"
