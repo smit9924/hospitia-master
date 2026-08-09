@@ -1,0 +1,39 @@
+---
+description: Notification service queue-consumer patterns
+globs: backend/services/notification/**/*
+alwaysApply: false
+---
+
+# Backend — Notification Service
+
+Service at `backend/services/notification/`. App package: `notification/notification/`.
+
+**No direct HTTP API today.** Entry points are message handlers consuming RabbitMQ (via the messaging abstraction).
+
+## Flow
+
+```text
+Auth/Other services → RabbitMQ → Handlers → Services → Jinja templates → Email/channel
+```
+
+## Package map
+
+```text
+notification/
+├── core/          # Config / settings
+├── handlers/      # Queue consumers / message entry points
+├── services/      # Business helpers for notification processing
+├── messaging/     # base abstraction + rabbitmq/
+├── channels/      # Delivery channels (e.g. email)
+├── exceptions/    # definitions (+ handlers as needed)
+├── schemas/       # Message/payload schemas
+├── templates/     # Jinja templates for notification content
+└── types/         # Shared types / enums
+```
+
+## Conventions
+
+- Add new message flows as handlers that delegate to `services/`; keep queue wiring out of business logic.
+- Render content with Jinja under `templates/`; do not hardcode large email bodies in Python.
+- Use the messaging abstraction—do not scatter RabbitMQ-specific calls in handlers/services.
+- Keep exception definitions centralized under `exceptions/`.

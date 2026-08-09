@@ -1,0 +1,42 @@
+---
+description: Auth service FastAPI layering and patterns
+globs: backend/services/auth/**/*
+alwaysApply: false
+---
+
+# Backend — Auth Service
+
+FastAPI service at `backend/services/auth/`. App package: `auth/auth/`.
+
+## Package map
+
+```text
+auth/
+├── api/           # HTTP layer
+│   ├── routes/    # Endpoints
+│   ├── services/  # Business logic
+│   ├── repositories/
+│   └── datamodels/
+├── core/          # Config, security, settings
+├── database/      # Alembic + SQLAlchemy models
+├── exceptions/    # definitions/, handlers/, registry
+├── messaging/     # base abstraction + rabbitmq/
+├── schemas/       # Pydantic request/response schemas
+└── types/         # Shared types, enums, error codes
+```
+
+## Layering
+
+```text
+API routes → Services → Repositories → SQLAlchemy models → PostgreSQL
+```
+
+- Routes validate input, call services, return responses—no heavy business or DB logic in routes.
+- Repositories own persistence; services own business rules.
+- Schema changes go through **Alembic** under `database/`.
+
+## Cross-cutting
+
+- **Exceptions**: define in `exceptions/definitions/`, handle in `exceptions/handlers/`, register via registry at startup.
+- **Messaging**: publish/consume through the MQ abstraction (`messaging/`), not RabbitMQ clients in business code.
+- **Schemas/types**: Pydantic in `schemas/`; shared constants/enums in `types/`.

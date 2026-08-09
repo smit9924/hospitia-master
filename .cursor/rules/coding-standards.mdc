@@ -1,0 +1,18 @@
+---
+description: Shared Hospitia agent conventions and team standards
+alwaysApply: true
+---
+
+# Coding Standards
+
+## Agent defaults
+
+- Follow existing patterns in the file/service you touch; match naming, layout, and error style.
+- Respect architectural layering (see architectural-principles and scoped backend/frontend rules).
+- Do not commit secrets, `.env` values, credentials, or paste them into rules/docs.
+- Prefer small, focused changes; avoid drive-by refactors unrelated to the request.
+- When adding cross-cutting behavior (auth, messaging, errors), extend existing abstractions instead of inventing parallel ones.
+
+## Team conventions
+
+<!-- Add project-specific naming, PR prefs, domain workflows, etc. below -->

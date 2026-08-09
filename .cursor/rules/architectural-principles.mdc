@@ -1,0 +1,15 @@
+---
+description: Core Hospitia architectural constraints
+alwaysApply: true
+---
+
+# Architectural Principles
+
+- **Multi-repo**: `frontend/` and `backend/` are separate Git repositories under `hospitia-master`.
+- **Multiple frontend apps**: New Angular applications belong under `frontend/clients/`.
+- **Service-oriented backend**: Backend domains are separated into independent services.
+- **Layered Auth API**: Follow `API → Services → Repositories → Database`; keep business and persistence logic out of route handlers.
+- **Messaging abstraction**: Use the project's MQ abstraction; keep RabbitMQ-specific code inside its implementation layer.
+- **Centralized exceptions**: Follow the existing service-level exception definition/handler/registration pattern.
+- **Configuration separation**: Keep environment-specific configuration outside business logic; never hardcode secrets or environment-specific values.
+- **Existing patterns first**: Before introducing a new pattern, inspect and follow the closest existing implementation.

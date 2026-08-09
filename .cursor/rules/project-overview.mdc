@@ -1,0 +1,21 @@
+---
+description: Hospitia project purpose and workspace layout
+alwaysApply: true
+---
+
+# Hospitia — Project Overview
+
+Hospitia is a **Guest House Management System for NGOs**.
+
+## Workspace
+
+`hospitia-master` is an umbrella workspace containing two separate Git repositories:
+
+```text
+hospitia-master/
+├── frontend/       # Angular frontend repository
+├── backend/        # FastAPI backend repository
+├── .devcontainer/  # Development environment configuration
+├── jenkins/        # Top-level CI/CD configuration
+├── server-setup/   # Server/deployment configuration
+└── README.md
