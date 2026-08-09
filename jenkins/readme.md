@@ -60,7 +60,7 @@ Update the variables inside `.env`.
 Start Jenkins using Docker Compose.
 
 ```bash
-docker compose up -f docker-compose.yml -d --build
+docker compose -f docker-compose.yml up -d --build
 ```
 
 ---
