@@ -46,5 +46,20 @@
             "python": "${workspaceFolder}/backend/services/booking/.venv/bin/python3.13",
             "jinja": true
         },
+        {
+            "name": "Python Debug: Payment",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "payment.main:app",
+                "--reload",
+                "--port",
+                "8004"
+            ],
+            "cwd": "${workspaceFolder}/backend/services/payment",
+            "python": "${workspaceFolder}/backend/services/payment/.venv/bin/python3.13",
+            "jinja": true
+        },
     ]
 }
