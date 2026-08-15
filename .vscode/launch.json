@@ -30,6 +30,21 @@
             "cwd": "${workspaceFolder}/backend/services/notification",
             "python": "${workspaceFolder}/backend/services/notification/.venv/bin/python3.13",
             "jinja": true
-        }
+        },
+        {
+            "name": "Python Debug: Booking",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "booking.main:app",
+                "--reload",
+                "--port",
+                "8003"
+            ],
+            "cwd": "${workspaceFolder}/backend/services/booking",
+            "python": "${workspaceFolder}/backend/services/booking/.venv/bin/python3.13",
+            "jinja": true
+        },
     ]
 }

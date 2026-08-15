@@ -58,7 +58,7 @@
             "command": "bash",
             "args": [
                 "-c",
-                "cd ${workspaceFolder}/backend/services/auth && uv sync && cd ${workspaceFolder}/backend/services/notification && uv sync && cd ${workspaceFolder}/frontend/clients/main && npm install"
+                "cd ${workspaceFolder}/backend/services/auth && uv sync && cd ${workspaceFolder}/backend/services/notification && uv sync && cd ${workspaceFolder}/backend/services/booking && uv sync && cd ${workspaceFolder}/frontend/clients/main && npm install"
             ]
         },
         {
@@ -184,6 +184,82 @@
             "options": {
                 "cwd": "${workspaceFolder}/backend/services/notification/notification/"
             }
-        }
+        },
+        {
+            "label": "service : booking",
+            "type": "process",
+            "isBackground": true,
+            "command": "uv",
+            "args": [
+                "run",
+                "fastapi",
+                "dev",
+                "--port",
+                "8003",
+                "booking/main.py"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend/services/booking"
+            }
+        },
+        {
+            "label": "Lint : booking (ruff check)",
+            "type": "process",
+            "isBackground": true,
+            "command": "uv",
+            "args": [
+                "run",
+                "ruff",
+                "check",
+                "."
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend/services/booking/booking/"
+            }
+        },
+        {
+            "label": "Lint : booking (ruff check --fix)",
+            "type": "process",
+            "isBackground": true,
+            "command": "uv",
+            "args": [
+                "run",
+                "ruff",
+                "check",
+                "--fix",
+                "."
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend/services/booking/booking/"
+            }
+        },
+        {
+            "label": "Make migrations : booking",
+            "type": "process",
+            "isBackground": true,
+            "command": "bash",
+            "args": [
+                "create_migration.sh",
+                "booking",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend/scripts"
+            }
+        },
+        {
+            "label": "Migrate : booking",
+            "type": "process",
+            "isBackground": true,
+            "command": "uv",
+            "args": [
+                "run",
+                "alembic",
+                "upgrade",
+                "head"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend/services/booking/booking/database"
+            }
+        },
     ]
 }
