@@ -40,7 +40,7 @@
                 "booking.main:app",
                 "--reload",
                 "--port",
-                "8003"
+                "8004"
             ],
             "cwd": "${workspaceFolder}/backend/services/booking",
             "python": "${workspaceFolder}/backend/services/booking/.venv/bin/python3.13",
@@ -55,7 +55,7 @@
                 "payment.main:app",
                 "--reload",
                 "--port",
-                "8004"
+                "8006"
             ],
             "cwd": "${workspaceFolder}/backend/services/payment",
             "python": "${workspaceFolder}/backend/services/payment/.venv/bin/python3.13",

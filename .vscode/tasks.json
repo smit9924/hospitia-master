@@ -195,7 +195,7 @@
                 "fastapi",
                 "dev",
                 "--port",
-                "8003",
+                "8004",
                 "booking/main.py"
             ],
             "options": {
@@ -271,7 +271,7 @@
                 "fastapi",
                 "dev",
                 "--port",
-                "8004",
+                "8006",
                 "payment/main.py"
             ],
             "options": {
