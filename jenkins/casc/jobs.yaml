@@ -5,3 +5,4 @@ jobs:
   - file: /var/jenkins_home/job-dsl/backend/notification.groovy
   - file: /var/jenkins_home/job-dsl/backend/booking.groovy
   - file: /var/jenkins_home/job-dsl/backend/dashboard.groovy
+  - file: /var/jenkins_home/job-dsl/backend/payment.groovy
