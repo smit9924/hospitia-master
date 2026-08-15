@@ -61,5 +61,20 @@
             "python": "${workspaceFolder}/backend/services/payment/.venv/bin/python3.13",
             "jinja": true
         },
+        {
+            "name": "Python Debug: Dashboard",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "dashboard.main:app",
+                "--reload",
+                "--port",
+                "8005"
+            ],
+            "cwd": "${workspaceFolder}/backend/services/dashboard",
+            "python": "${workspaceFolder}/backend/services/dashboard/.venv/bin/python3.13",
+            "jinja": true
+        }
     ]
 }

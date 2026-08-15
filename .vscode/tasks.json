@@ -337,5 +337,81 @@
                 "cwd": "${workspaceFolder}/backend/services/payment/payment/database"
             }
         },
+        {
+            "label": "service : dashboard",
+            "type": "process",
+            "isBackground": true,
+            "command": "uv",
+            "args": [
+                "run",
+                "fastapi",
+                "dev",
+                "--port",
+                "8005",
+                "dashboard/main.py"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend/services/dashboard"
+            }
+        },
+        {
+            "label": "Lint : dashboard (ruff check)",
+            "type": "process",
+            "isBackground": true,
+            "command": "uv",
+            "args": [
+                "run",
+                "ruff",
+                "check",
+                "."
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend/services/dashboard/dashboard/"
+            }
+        },
+        {
+            "label": "Lint : dashboard (ruff check --fix)",
+            "type": "process",
+            "isBackground": true,
+            "command": "uv",
+            "args": [
+                "run",
+                "ruff",
+                "check",
+                "--fix",
+                "."
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend/services/dashboard/dashboard/"
+            }
+        },
+        {
+            "label": "Make migrations : dashboard",
+            "type": "process",
+            "isBackground": true,
+            "command": "bash",
+            "args": [
+                "create_migration.sh",
+                "dashboard",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend/scripts"
+            }
+        },
+        {
+            "label": "Migrate : dashboard",
+            "type": "process",
+            "isBackground": true,
+            "command": "uv",
+            "args": [
+                "run",
+                "alembic",
+                "upgrade",
+                "head"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend/services/dashboard/dashboard/database"
+            }
+        }
     ]
 }
