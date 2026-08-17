@@ -4,7 +4,6 @@ final String JENKINSFILE = 'services/notification/jenkins/Jenkinsfile'
 
 final List<String> BRANCHES = [
     'main',
-    'feature/notification-service',
 ]
 
 pipelineJob('Backend/notification') {
