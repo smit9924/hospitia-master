@@ -12,7 +12,8 @@
 			"ms-python.python",
 			"shardulm94.trailing-spaces",
 			"redhat.vscode-yaml",
-			"bierner.markdown-mermaid"
+			"bierner.markdown-mermaid",
+			"cnshenj.vscode-task-manager"
 		]
 	  }
 	},
