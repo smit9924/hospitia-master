@@ -1,0 +1,34 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # Auth Service
+  - job_name: auth
+    static_configs:
+      - targets: ["auth-service:9002"]
+
+  # Notification Service
+  - job_name: notification
+    static_configs:
+      - targets: ["notification-service:9003"]
+
+  # Booking Service
+  - job_name: booking
+    static_configs:
+      - targets: ["booking-service:9004"]
+
+  # Dashboard Service
+  - job_name: dashboard
+    static_configs:
+      - targets: ["dashboard-service:9005"]
+
+  # Payment Service
+  - job_name: payment
+    static_configs:
+      - targets: ["payment-service:9006"]

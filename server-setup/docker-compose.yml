@@ -1,13 +1,21 @@
+# Reusable logging configuration (values from .env)
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "${DOCKER_LOG_MAX_SIZE}"
+    max-file: "${DOCKER_LOG_MAX_FILE}"
+
 services:
   postgres:
     image: postgres:17
     container_name: hospitia-postgres
     restart: on-failure
+    logging: *default-logging
 
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: postgres
+      POSTGRES_DB: ${POSTGRES_DB}
 
     ports:
       - "5432:5432"
@@ -36,6 +44,7 @@ services:
     image: nginx:1.29-alpine
     container_name: hospitia-nginx
     restart: on-failure
+    logging: *default-logging
 
     depends_on:
       - postgres
@@ -60,6 +69,7 @@ services:
     image: rabbitmq:4-management
     container_name: hospitia-rabbitmq
     restart: on-failure
+    logging: *default-logging
 
     ports:
       - "5672:5672"
@@ -80,6 +90,113 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  loki:
+    image: grafana/loki:3.5.5
+    container_name: hospitia-loki
+    restart: on-failure
+    logging: *default-logging
+    command:
+      - -config.file=/etc/loki/config.yaml
+      - -config.expand-env=true
+    volumes:
+      - ./loki/config.yaml:/etc/loki/config.yaml:ro
+      - ./loki/data:/loki
+    networks:
+      - hospitia-network
+    env_file:
+      - path: ./.env
+        required: true
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://127.0.0.1:3100/ready || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  # Prometheus is currently disabled.
+  # Uncomment this block once all API services expose a /metrics endpoint.
+  # Configuration is prepared but has not been tested yet.
+  # Note: Once prometheus is enabled, uncomment prometheuse dependency in grafana service.
+  # Also, uncomment prometheus datasource in grafana/provisioning/datasources/datasources.yml
+  # prometheus:
+  #   image: prom/prometheus:v3.5.0
+  #   container_name: hospitia-prometheus
+  #   restart: on-failure
+  #   logging: *default-logging
+  #   # Prometheus stores recent matrix data in memory for optimization
+  #   # So we need to limit the memory
+  #   mem_limit: 350m
+  #   command:
+  #     - --config.file=/etc/prometheus/prometheus.yml
+  #     - --storage.tsdb.path=/prometheus
+  #     - --storage.tsdb.retention.time=${PROMETHEUS_RETENTION_DAYS}d
+  #     - --web.enable-lifecycle
+  #   volumes:
+  #     - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+  #     - ./prometheus/data:/prometheus
+  #   networks:
+  #     - hospitia-network
+  #   env_file:
+  #     - path: ./.env
+  #       required: true
+  #   healthcheck:
+  #     test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:9090/-/healthy"]
+  #     interval: 15s
+  #     timeout: 5s
+  #     retries: 5
+  #     start_period: 10s
+
+  alloy:
+    image: grafana/alloy:v1.12.0
+    container_name: hospitia-alloy
+    restart: on-failure
+    logging: *default-logging
+    command:
+      - run
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy/data
+      - /etc/alloy/config.alloy
+    volumes:
+      - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
+      - ./alloy/data:/var/lib/alloy/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      loki:
+        condition: service_healthy
+    networks:
+      - hospitia-network
+    env_file:
+      - path: ./.env
+        required: true
+
+  grafana:
+    image: grafana/grafana:13.1.3
+    container_name: hospitia-grafana
+    restart: on-failure
+    logging: *default-logging
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      loki:
+        condition: service_healthy
+      # Uncomment below once prometheus is enabled
+      # prometheus:
+      #   condition: service_healthy
+    networks:
+      - hospitia-network
+    env_file:
+      - path: ./.env
+        required: true
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
 
 networks:
   hospitia-network:

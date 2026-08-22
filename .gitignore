@@ -6,3 +6,13 @@
 
 # Ignore postgresql data directory
 .devcontainer/postgres/data
+
+# Server observability bind-mount data (keep .gitkeep)
+server-setup/grafana/data/**
+!server-setup/grafana/data/.gitkeep
+server-setup/loki/data/**
+!server-setup/loki/data/.gitkeep
+server-setup/prometheus/data/**
+!server-setup/prometheus/data/.gitkeep
+server-setup/alloy/data/**
+!server-setup/alloy/data/.gitkeep

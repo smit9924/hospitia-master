@@ -127,7 +127,26 @@ Verify that all infrastructure containers are running successfully.
 docker compose ps
 ```
 
-You should see the required infrastructure containers (such as Nginx and PostgreSQL) in the **Up** state.
+You should see the required infrastructure containers (such as Nginx, PostgreSQL, Loki, Prometheus, Alloy, and Grafana) in the **Up** state.
+
+---
+
+## Observability
+
+Grafana, Loki, Prometheus, and Grafana Alloy run on the same Compose file and Docker network as Postgres, Nginx, and RabbitMQ.
+
+Pinned images (never `latest`):
+
+* Grafana Enterprise `13.1.3` — UI at port `3000`. Admin user and password come from `.env`. Dashboards survive recreation via `./grafana/data` and provisioning under `./grafana/provisioning`.
+* Loki `3.5.5` — log store. Retention is `LOKI_RETENTION_DAYS` (default 10). Config is bind-mounted from `./loki/config.yaml`.
+* Prometheus `v3.5.0` — metrics store, self-scrape only. Ready for future `/metrics` jobs. No Alertmanager.
+* Grafana Alloy `v1.12.0` — reads Docker container stdout via the Docker socket and pushes logs to Loki. FastAPI must log JSON to stdout (`ENVIRONMENT=production`, `LOG_FORMAT=json`). Do not write log files in production.
+
+Docker JSON-file logs are rotated (`max-size=10m`, `max-file=3`) on Compose services and on the Auth service `docker run` from Jenkins, so container logs do not grow without bound. Loki is the query store.
+
+Open Grafana at `http://<server>:3000`, sign in with `GRAFANA_ADMIN_USER` / `GRAFANA_ADMIN_PASSWORD`, and open **Hospitia → Application logs** or Explore → Loki. Filter by `container` (for Auth: `auth-service`).
+
+Tempo, Vector, OpenTelemetry tracing, and Alertmanager are not deployed.
 
 ---
 
