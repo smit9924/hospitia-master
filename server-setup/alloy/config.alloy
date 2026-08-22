@@ -1,5 +1,5 @@
 logging {
-  level  = "info"
+  level = "info"
 }
 
 discovery.docker "containers" {
@@ -11,8 +11,8 @@ discovery.relabel "containers" {
   targets = discovery.docker.containers.targets
 
   rule {
-    source_labels = ["__meta_docker_container_label_com_docker_compose_service"]
-    regex         = "auth|notification|booking|payment|dashboard"
+    source_labels = ["__meta_docker_container_label_com_hospitia_service"]
+    regex         = "^(auth-service|notification-service|booking-service|payment-service|dashboard-service)$"
     action        = "keep"
   }
 
@@ -23,7 +23,7 @@ discovery.relabel "containers" {
   }
 
   rule {
-    source_labels = ["__meta_docker_container_label_com_docker_compose_service"]
+    source_labels = ["__meta_docker_container_label_com_hospitia_service"]
     target_label  = "service"
   }
 }
