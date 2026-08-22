@@ -35,12 +35,12 @@
             "uid": "loki"
           },
           "editorMode": "code",
-          "expr": "{service=~\"auth|booking|payment|notification|dashboard\"}",
+          "expr": "{service=~\"$service\"}",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "title": "Container logs",
+      "title": "Application Logs",
       "type": "logs"
     }
   ],
@@ -65,10 +65,11 @@
         },
         "refresh": 1,
         "includeAll": true,
+        "allValue": ".*",
         "multi": false,
         "current": {
           "text": "All",
-          "value": "$__all"
+          "value": ".*"
         }
       }
     ]
@@ -79,7 +80,7 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Application logs",
+  "title": "Application Logs",
   "uid": "hospitia-app-logs",
-  "version": 1
+  "version": 2
 }
