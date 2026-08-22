@@ -10,21 +10,18 @@ discovery.docker "containers" {
 discovery.relabel "containers" {
   targets = discovery.docker.containers.targets
 
-  # Keep only required services
   rule {
     source_labels = ["__meta_docker_container_label_com_docker_compose_service"]
     regex         = "auth|notification|booking|payment|dashboard"
     action        = "keep"
   }
 
-  # Create a clean container label
   rule {
     source_labels = ["__meta_docker_container_name"]
     regex         = "/(.*)"
     target_label  = "container"
   }
 
-  # Create a service label
   rule {
     source_labels = ["__meta_docker_container_label_com_docker_compose_service"]
     target_label  = "service"
