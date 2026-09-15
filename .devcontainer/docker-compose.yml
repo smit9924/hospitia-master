@@ -78,6 +78,21 @@ services:
         networks:
           - dev-net
 
+    mailpit:
+        container_name: ${project_name}-mailpit
+        image: axllent/mailpit:v1.31
+        hostname: ${project_name}-mailpit
+        ports:
+          - "1025:1025" # SMTP
+          - "8025:8025" # Web UI
+        volumes:
+          - ./mailpit/data:/data
+        env_file:
+          - path: ./.env
+            required: true
+        networks:
+          - dev-net
+
 networks:
     dev-net:
         external: true

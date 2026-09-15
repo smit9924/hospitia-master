@@ -7,6 +7,9 @@
 # Ignore postgresql data directory
 .devcontainer/postgres/data
 
+# Ignore mailpit data directory
+.devcontainer/mailpit/data
+
 # Server observability bind-mount data (keep .gitkeep)
 server-setup/grafana/data/**
 !server-setup/grafana/data/.gitkeep
