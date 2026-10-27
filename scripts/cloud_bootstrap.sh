@@ -48,8 +48,9 @@
 # keeps existing .env files and leaves running containers untouched.
 #
 # It fails loudly (exit 1, with the reason and container logs) when a
-# required command is missing, a port is taken, or any service does not
-# respond after starting. "Done" is printed only when every service works.
+# required command is missing, a port is taken, any service does not
+# respond after starting, or a database migration fails. "Done" is
+# printed only when every service works and every database is migrated.
 #######################################################################
 
 set -euo pipefail
@@ -104,7 +105,8 @@ SERVICE_READY_POLL_SECONDS=2
 # Commands this script cannot work without. They are preinstalled on the
 # cloud VM; if one is missing, the script stops instead of half-working.
 # 'ss' is handled separately by ensureSsInstalled, which installs it.
-REQUIRED_COMMANDS=(docker dockerd curl apt-get)
+# uv runs the backend database migrations.
+REQUIRED_COMMANDS=(docker dockerd curl apt-get uv)
 
 # Compose command used for every container operation. The cloud override
 # (docker-compose.cloud.yml) adds nginx plus cloud-only settings, and is
@@ -461,6 +463,68 @@ waitForServices() {
 }
 
 
+migrateDatabases() {
+    # -------------------------------------------------------------
+    # migrateDatabases
+    # Description: Brings every backend database up to date. Postgres'
+    #              init script (docker-entrypoint-initdb.d) only creates
+    #              the empty databases; the tables come from each
+    #              service's Alembic migrations.
+    #              A service is migrated when it has
+    #              <service>/<service>/database/alembic.ini (auth, booking,
+    #              dashboard, payment today; notification has no
+    #              database), so new services are picked up automatically.
+    #              The command is the same one the deployment uses
+    #              (jenkins/scripts), run from the service folder so the
+    #              service package imports correctly. Alembic reads the
+    #              database URL from the service settings, i.e. the .env
+    #              created from .sample.cloud-dev.env (localhost).
+    #              "upgrade head" only applies missing migrations, so this
+    #              is a no-op on a second run.
+    # Arguments: None
+    # Output: Progress and Alembic output on stdout. Exits with an error
+    #         naming the service if dependency install or a migration
+    #         fails.
+    # -------------------------------------------------------------
+    local service_dir service ini migrated=0
+
+    for service_dir in "$ROOT"/backend/services/*/; do
+        # The glob stays literal when nothing matches. Skip that case.
+        [[ -d "$service_dir" ]] || continue
+        service_dir="${service_dir%/}"
+        service="$(basename "$service_dir")"
+        ini="$service/database/alembic.ini"
+
+        if [[ ! -f "$service_dir/$ini" ]]; then
+            log "$service has no Alembic migrations. Skipping."
+            continue
+        fi
+
+        log "Migrating the $service database"
+
+        # Install the service's dependencies (Alembic, its models' imports)
+        # into its .venv. --locked installs exactly what uv.lock pins and
+        # fails if uv.lock is out of date with pyproject.toml, instead of
+        # silently changing uv.lock.
+        if ! (cd "$service_dir" && uv sync --locked --quiet); then
+            fail "Installing dependencies for $service failed (uv sync --locked in $service_dir). See the output above."
+        fi
+
+        # --no-sync: dependencies were just installed above
+        if ! (cd "$service_dir" && uv run --no-sync alembic -c "./$ini" upgrade head); then
+            fail "Database migration failed for $service (alembic -c ./$ini upgrade head in $service_dir). See the output above."
+        fi
+
+        migrated=$(( migrated + 1 ))
+    done
+
+    if (( migrated == 0 )); then
+        fail "No service with Alembic migrations found under $ROOT/backend/services. Expected <service>/<service>/database/alembic.ini."
+    fi
+    log "Migrated $migrated database(s)"
+}
+
+
 addLocalHostnames() {
     # -------------------------------------------------------------
     # addLocalHostnames
@@ -586,17 +650,24 @@ waitForServices
 
 
 # ***************************************************************
-# ***************** 5. *.localhost hostnames ********************
+# ***************** 5. Database migrations **********************
+# ***************************************************************
+# Runs after waitForServices, so Postgres is known to accept connections.
+migrateDatabases
+
+
+# ***************************************************************
+# ***************** 6. *.localhost hostnames ********************
 # ***************************************************************
 addLocalHostnames
 
 
 # ***************************************************************
-# ***************** 6. Summary **********************************
+# ***************** 7. Summary **********************************
 # ***************************************************************
 cat <<'EOF'
 
-[cloud-bootstrap] Done. All services are responding. Endpoints (credentials: see CLAUDE.md "Cloud sessions"):
+[cloud-bootstrap] Done. All services are responding and all databases are migrated. Endpoints (credentials: see CLAUDE.md "Cloud sessions"):
   Postgres       localhost:5432
   RabbitMQ       localhost:5672   (management UI: http://localhost:15672)
   Mailpit SMTP   localhost:1025
