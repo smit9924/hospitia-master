@@ -1,0 +1,48 @@
+# =====================================================================
+# Cloud-session override for docker-compose.yml (Claude Code, claude.ai/code)
+#
+# Why this file exists:
+#   Locally, nginx runs inside the "workspace" devcontainer and routes
+#   *.localhost hostnames (main-client.localhost, auth.localhost, ...) to
+#   the dev servers running in that same container. In a cloud session
+#   there is no devcontainer: the VM itself is the workspace, so nginx
+#   runs as its own container here instead.
+#
+# How it is used (merged on top of docker-compose.yml, never on its own):
+#   docker compose -f docker-compose.yml -f docker-compose.cloud.yml \
+#       up -d postgres pgadmin rabbitmq mailpit nginx
+#   scripts/cloud_bootstrap.sh runs exactly this in cloud sessions.
+#   It only adds the nginx service, so postgres/pgadmin/rabbitmq/mailpit
+#   stay defined in one place (docker-compose.yml) and cannot drift.
+#
+# The local devcontainer workflow never uses this file.
+# =====================================================================
+
+services:
+    nginx:
+        container_name: ${project_name}-nginx
+        # Pinned tag; keep in sync with the image list in scripts/cloud_env_setup.sh
+        image: nginx:1.27-alpine
+        restart: always
+
+        # Share the VM's network so "localhost" inside nginx is the VM.
+        # The upstreams in nginx/conf.d (localhost:8000 auth, localhost:8001
+        # frontend, ...) then reach the dev servers running on the VM, just
+        # like they reach the dev servers inside the devcontainer locally.
+        # With host networking, nginx listens on the VM's port 80 directly,
+        # so no "ports:" mapping is needed (or allowed).
+        network_mode: host
+
+        # mailpit.localhost.conf proxies to webapp-mailpit:8025, a hostname
+        # that only exists on the dev-net Docker network. On the host network
+        # it would not resolve and nginx would refuse to start. Mailpit
+        # publishes 8025 on the VM, so map that hostname to the VM itself.
+        extra_hosts:
+            - "webapp-mailpit:127.0.0.1"
+
+        # Mount only the site configs, read-only. The rest of ./nginx is the
+        # Debian nginx.conf used in the devcontainer, which loads Debian-only
+        # dynamic modules (modules-enabled/*.conf) that this image lacks.
+        # The image's own nginx.conf already includes /etc/nginx/conf.d/*.conf.
+        volumes:
+            - ./nginx/conf.d:/etc/nginx/conf.d:ro

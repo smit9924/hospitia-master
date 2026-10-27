@@ -8,9 +8,9 @@
 4. **Git** - Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) for version control.
 
 5. **Access:** - Make sure you have proper access to the following required repositories:
-   - [angular-fastapi-template-master](https://github.com/smit9924/angular-fastapi-template-master)
-   - [angular-fastapi-template-frontend](https://github.com/smit9924/angular-fastapi-template-frontend)
-   - [angular-fastapi-template-backend](https://github.com/smit9924/angular-fastapi-template-backend)
+   - [hospitia-master](https://github.com/smit9924/hospitia-master)
+   - [hospitia-frontend](https://github.com/smit9924/hospitia-frontend)
+   - [hospitia-backend](https://github.com/smit9924/hospitia-backend)
 
 ## Setting up the Project
 
@@ -27,17 +27,17 @@
 3. **Clone Repositories**
    - Clone the required repositories by running the following commands inside the `Project` directory:
      ```bash
-     $ git clone https://github.com/smit9924/angular-fastapi-template-master .
+     $ git clone https://github.com/smit9924/hospitia-master .
      $ mkdir frontend
-     $ git clone https://github.com/smit9924/angular-fastapi-template-frontend ./frontend/.
+     $ git clone https://github.com/smit9924/hospitia-frontend ./frontend/.
      $ mkdir backend
-     $ git clone https://github.com/smit9924/angular-fastapi-template-backend ./backend/.
+     $ git clone https://github.com/smit9924/hospitia-backend ./backend/.
      ```
 
 4. **Run Initial Setup Script**
-   - To install and configure necessary dependencies, execute the `initialSetup.sh` script:
+   - To install and configure necessary dependencies, execute the `scripts/initial_setup.sh` script:
      ```bash
-     $ bash ./initialSetup.sh
+     $ bash ./scripts/initial_setup.sh
      ```
 
 5. **Open Project in VS Code**
@@ -66,3 +66,16 @@ Once logged in, you will already be connected to the database server and can vie
 > **Note:** If prompted for a password, enter `password`.
 
 You’re now ready to visualize data and perform DB operation using PgAdmin4!
+
+
+## Claude Code cloud sessions
+
+Cloud sessions on [claude.ai/code](https://claude.ai/code) can't use the devcontainer. The cloud VM acts as the workspace, and only the infrastructure containers run in Docker.
+
+1. **Install the Claude GitHub App** on all 3 repositories: `hospitia-master`, `hospitia-frontend` and `hospitia-backend`.
+2. **Create a cloud environment:**
+   - Network access: **Trusted**.
+   - Setup script: paste the full contents of [`scripts/cloud_env_setup.sh`](scripts/cloud_env_setup.sh).
+   - Environment variables: none needed. Each backend service's `.sample.cloud-dev.env` already points Postgres, RabbitMQ and SMTP at `localhost`.
+3. **Start a session** with all 3 repositories selected.
+4. **Claude runs the bootstrap script**, `bash hospitia-master/scripts/cloud_bootstrap.sh`. It links the sibling repos into `hospitia-master/frontend` and `hospitia-master/backend`, creates missing `.env` files (backend services from `.sample.cloud-dev.env`) and starts Postgres, PgAdmin, RabbitMQ, Mailpit and an nginx container (`.devcontainer/docker-compose.cloud.yml`). nginx gives the coding agent the same `*.localhost` routing as the devcontainer, such as `http://main-client.localhost`. See the "Cloud sessions" section of `CLAUDE.md` for endpoints and dev-server commands.

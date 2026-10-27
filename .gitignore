@@ -22,3 +22,8 @@ server-setup/prometheus/data/**
 !server-setup/prometheus/data/.gitkeep
 server-setup/alloy/data/**
 !server-setup/alloy/data/.gitkeep
+
+# Nested frontend/backend repositories (local clones or cloud-session symlinks).
+# No trailing slash, so symlinks are matched too.
+/frontend
+/backend
