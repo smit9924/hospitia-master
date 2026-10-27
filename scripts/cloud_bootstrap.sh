@@ -45,6 +45,10 @@
 #
 # The script is idempotent: running it again keeps existing symlinks,
 # keeps existing .env files and leaves running containers untouched.
+#
+# It fails loudly (exit 1, with the reason and container logs) when a
+# required command is missing, a port is taken, or any service does not
+# respond after starting. "Done" is printed only when every service works.
 #######################################################################
 
 set -euo pipefail
@@ -89,9 +93,21 @@ HOSTS_MARKER="# hospitia-cloud-dev"
 # Maximum time to wait for the Docker daemon to come up
 DOCKER_START_TIMEOUT_SECONDS=60
 
+# Maximum time to wait for every service to respond after "compose up".
+# pgAdmin's first start (it initialises its own database) is the slowest.
+SERVICE_READY_TIMEOUT_SECONDS=120
+
+# Seconds between readiness checks
+SERVICE_READY_POLL_SECONDS=2
+
+# Commands this script cannot work without. They are preinstalled on the
+# cloud VM; if one is missing, the script stops instead of half-working.
+# 'ss' is handled separately by ensureSsInstalled, which installs it.
+REQUIRED_COMMANDS=(docker dockerd curl apt-get)
+
 # Compose command used for every container operation. The cloud override
-# (docker-compose.cloud.yml) only adds nginx, and is always merged on top
-# of docker-compose.yml. Relative paths resolve against DEVCONTAINER_DIR,
+# (docker-compose.cloud.yml) adds nginx plus cloud-only settings, and is
+# always merged on top of docker-compose.yml. Relative paths resolve against DEVCONTAINER_DIR,
 # which the script cd's into before using this.
 COMPOSE=(docker compose -f docker-compose.yml -f docker-compose.cloud.yml)
 
@@ -221,6 +237,57 @@ startDockerDaemon() {
 }
 
 
+requireCommands() {
+    # -------------------------------------------------------------
+    # requireCommands
+    # Description: Verifies that every given command is available, and
+    #              stops the script (listing all missing ones at once) if
+    #              any is not, instead of failing halfway through with a
+    #              cryptic "command not found".
+    # Arguments: $@ → command names
+    # Output: None. Exits with an error if any command is missing.
+    # -------------------------------------------------------------
+    local missing=()
+    local cmd
+    for cmd in "$@"; do
+        command -v "$cmd" >/dev/null 2>&1 || missing+=("$cmd")
+    done
+
+    if (( ${#missing[@]} > 0 )); then
+        fail "Required command(s) not found: ${missing[*]}. They are preinstalled on the Claude Code cloud VM; if the image changed, install them in scripts/cloud_env_setup.sh."
+    fi
+}
+
+
+ensureSsInstalled() {
+    # -------------------------------------------------------------
+    # ensureSsInstalled
+    # Description: Makes sure 'ss' (used by checkPortsAvailable) exists.
+    #              The cloud base image does not include iproute2, the
+    #              package that provides it. cloud_env_setup.sh installs
+    #              it into the cached environment; this is the fallback
+    #              for an environment built before that. The port check is
+    #              never skipped: a missing 'ss' that can't be installed
+    #              stops the script. Cloud sessions run as root, so
+    #              apt-get needs no sudo.
+    # Arguments: None
+    # Output: None. Exits with an error if 'ss' cannot be installed.
+    # -------------------------------------------------------------
+    if command -v ss >/dev/null 2>&1; then
+        return
+    fi
+
+    log "'ss' not found. Installing iproute2 (provides ss)"
+    if ! DEBIAN_FRONTEND=noninteractive apt-get update -qq \
+        || ! DEBIAN_FRONTEND=noninteractive apt-get install -y -qq iproute2; then
+        fail "Could not install iproute2 (provides 'ss'), so ports cannot be checked."
+    fi
+
+    command -v ss >/dev/null 2>&1 \
+        || fail "'ss' is still unavailable after installing iproute2, so ports cannot be checked."
+}
+
+
 checkPortsAvailable() {
     # -------------------------------------------------------------
     # checkPortsAvailable
@@ -236,12 +303,8 @@ checkPortsAvailable() {
     # Arguments: None (uses SERVICE_PORTS and COMPOSE; must run from
     #            DEVCONTAINER_DIR)
     # Output: None. Exits with an error listing every conflicting port.
+    #         Requires 'ss' (see ensureSsInstalled).
     # -------------------------------------------------------------
-    if ! command -v ss >/dev/null 2>&1; then
-        log "WARNING: 'ss' not found. Skipping the port availability check."
-        return
-    fi
-
     # Services of this compose project that are already running
     local running_services
     running_services="$("${COMPOSE[@]}" ps --status running --services 2>/dev/null || true)"
@@ -272,6 +335,120 @@ checkPortsAvailable() {
         done
         fail "Free the port(s) above, then run this script again. Inspect with: ss -ltnp"
     fi
+}
+
+
+httpResponds() {
+    # -------------------------------------------------------------
+    # httpResponds
+    # Description: Checks whether something answers HTTP on a URL. Any
+    #              status code counts (e.g. 401 from Mailpit's login or 502
+    #              from nginx with no dev server behind it): the point is
+    #              that the service accepts connections. curl reports 000
+    #              when nothing answers.
+    # Arguments: $1 → URL
+    # Returns: 0 if the URL answered, 1 otherwise
+    # -------------------------------------------------------------
+    local code
+    code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 3 "$1" || true)"
+    [[ -n "$code" && "$code" != "000" ]]
+}
+
+
+probeService() {
+    # -------------------------------------------------------------
+    # probeService
+    # Description: Checks whether one service is actually working, not
+    #              just started. "docker compose up -d" succeeds even when
+    #              the app inside a container crashes right after (as
+    #              Mailpit and pgAdmin did), so each service gets a real
+    #              check.
+    # Arguments: $1 → service name (a key of SERVICE_PORTS)
+    # Returns: 0 if the service responds, 1 otherwise
+    # -------------------------------------------------------------
+    case "$1" in
+        # pg_isready runs inside the container, so it matches the server
+        # version and needs no client on the VM
+        postgres) "${COMPOSE[@]}" exec -T postgres pg_isready -q >/dev/null 2>&1 ;;
+        rabbitmq) httpResponds "http://localhost:15672/" ;;
+        mailpit)  httpResponds "http://localhost:8025/" ;;
+        pgadmin)  httpResponds "http://localhost:8080/misc/ping" ;;
+        nginx)    httpResponds "http://localhost:80/" ;;
+        *)        fail "No readiness check defined for service '$1'. Add one to probeService." ;;
+    esac
+}
+
+
+showServiceLogs() {
+    # -------------------------------------------------------------
+    # showServiceLogs
+    # Description: Prints the last log lines of a service on stderr, so
+    #              a failure explains itself without extra commands.
+    # Arguments: $1 → service name
+    # Output: Log lines on stderr
+    # -------------------------------------------------------------
+    echo "[cloud-bootstrap] ----- last 30 log lines of '$1' -----" >&2
+    "${COMPOSE[@]}" logs --no-color --tail 30 "$1" >&2 2>&1 || true
+}
+
+
+waitForServices() {
+    # -------------------------------------------------------------
+    # waitForServices
+    # Description: After "compose up", waits until every service responds
+    #              (see probeService). Fails immediately if a container
+    #              exits, or after SERVICE_READY_TIMEOUT_SECONDS if a
+    #              service never responds (e.g. stuck restarting). Either
+    #              way it prints the failing services' logs and exits 1.
+    # Arguments: None (uses SERVICE_PORTS and COMPOSE)
+    # Output: Progress on stdout. Exits with an error on failure.
+    # -------------------------------------------------------------
+    local pending=("${!SERVICE_PORTS[@]}")
+    local waited=0
+    local exited service
+    local still_pending crashed
+
+    log "Waiting up to ${SERVICE_READY_TIMEOUT_SECONDS}s for all services to respond"
+    while true; do
+        # Containers that have stopped. "-a" includes stopped containers,
+        # which "ps" hides by default.
+        exited="$("${COMPOSE[@]}" ps -a --status exited --services 2>/dev/null || true)"
+
+        still_pending=()
+        crashed=()
+        for service in "${pending[@]}"; do
+            if grep -qx "$service" <<<"$exited"; then
+                crashed+=("$service")
+            elif probeService "$service"; then
+                log "$service is responding"
+            else
+                still_pending+=("$service")
+            fi
+        done
+
+        # A stopped container will not recover on its own: fail right away
+        if (( ${#crashed[@]} > 0 )); then
+            for service in "${crashed[@]}"; do
+                showServiceLogs "$service"
+            done
+            fail "Container(s) exited after starting: ${crashed[*]}. See the logs above."
+        fi
+
+        if (( ${#still_pending[@]} == 0 )); then
+            return
+        fi
+
+        if (( waited >= SERVICE_READY_TIMEOUT_SECONDS )); then
+            for service in "${still_pending[@]}"; do
+                showServiceLogs "$service"
+            done
+            fail "Service(s) not responding after ${SERVICE_READY_TIMEOUT_SECONDS}s: ${still_pending[*]}. See the logs above."
+        fi
+
+        pending=("${still_pending[@]}")
+        sleep "$SERVICE_READY_POLL_SECONDS"
+        waited=$(( waited + SERVICE_READY_POLL_SECONDS ))
+    done
 }
 
 
@@ -317,6 +494,13 @@ addLocalHostnames() {
             | sort -u
     )
 }
+
+
+# ***************************************************************
+# ***************** 0. Required commands ************************
+# ***************************************************************
+requireCommands "${REQUIRED_COMMANDS[@]}"
+ensureSsInstalled
 
 
 # ***************************************************************
@@ -377,8 +561,9 @@ fi
 # and Node. Ports are published on the VM, so everything is on localhost.
 #
 # docker-compose.cloud.yml is merged on top of docker-compose.yml and
-# only adds the nginx service (host network, same conf.d site configs as
-# the devcontainer). Both files are always passed together (COMPOSE).
+# adds the nginx service (host network, same conf.d site configs as the
+# devcontainer) plus cloud-only settings. Both files are always passed
+# together (COMPOSE).
 cd "$DEVCONTAINER_DIR"
 
 # Fail early with a clear message if another process holds one of our
@@ -388,6 +573,10 @@ checkPortsAvailable
 
 log "Starting postgres, pgadmin, rabbitmq, mailpit and nginx"
 "${COMPOSE[@]}" up -d "${!SERVICE_PORTS[@]}"
+
+# "up -d" returns as soon as containers are started, even if the app
+# inside crashes a second later. Only continue once every service works.
+waitForServices
 
 
 # ***************************************************************
@@ -401,7 +590,7 @@ addLocalHostnames
 # ***************************************************************
 cat <<'EOF'
 
-[cloud-bootstrap] Done. Service endpoints (credentials: see CLAUDE.md "Cloud sessions"):
+[cloud-bootstrap] Done. All services are responding. Endpoints (credentials: see CLAUDE.md "Cloud sessions"):
   Postgres       localhost:5432
   RabbitMQ       localhost:5672   (management UI: http://localhost:15672)
   Mailpit SMTP   localhost:1025

@@ -22,11 +22,13 @@
 # What it does:
 #   1. Removes the preinstalled PostgreSQL server, which would otherwise
 #      hold port 5432 needed by the Postgres container.
-#   2. Installs Python 3.13 via uv (the backend requires >=3.13).
-#   3. Starts the Docker daemon if it is not running.
-#   4. Pulls the images used by .devcontainer/docker-compose.yml and
+#   2. Installs iproute2, which provides 'ss' for the bootstrap's port
+#      check (the base image does not include it).
+#   3. Installs Python 3.13 via uv (the backend requires >=3.13).
+#   4. Starts the Docker daemon if it is not running.
+#   5. Pulls the images used by .devcontainer/docker-compose.yml and
 #      .devcontainer/docker-compose.cloud.yml.
-#   5. Writes ~/.claude/CLAUDE.md, telling Claude to run the bootstrap
+#   6. Writes ~/.claude/CLAUDE.md, telling Claude to run the bootstrap
 #      script at the start of every session.
 #
 # Any failure exits non-zero, which (by design) stops the session from
@@ -86,7 +88,19 @@ fi
 
 
 # ***************************************************************
-# ***************** 2. Python ***********************************
+# ***************** 2. System packages **************************
+# ***************************************************************
+# scripts/cloud_bootstrap.sh checks for port conflicts with 'ss', which
+# comes from iproute2. The cloud base image does not include it, so
+# install it here; the environment cache keeps it for every session.
+# The package index may be stale on a fresh VM, so refresh it first.
+log "Installing iproute2 (provides ss)"
+DEBIAN_FRONTEND=noninteractive apt-get update -qq
+DEBIAN_FRONTEND=noninteractive apt-get install -y -qq iproute2
+
+
+# ***************************************************************
+# ***************** 3. Python ***********************************
 # ***************************************************************
 # uv is preinstalled on the VM. The backend services require Python >=3.13.
 log "Installing Python 3.13 via uv"
@@ -94,7 +108,7 @@ uv python install 3.13
 
 
 # ***************************************************************
-# ***************** 3. Docker daemon ****************************
+# ***************** 4. Docker daemon ****************************
 # ***************************************************************
 # Same guard as scripts/cloud_bootstrap.sh: start dockerd only if it is
 # not reachable, then wait up to 60s for it.
@@ -115,7 +129,7 @@ fi
 
 
 # ***************************************************************
-# ***************** 4. Docker images ****************************
+# ***************** 5. Docker images ****************************
 # ***************************************************************
 # Keep these tags in sync with .devcontainer/docker-compose.yml and
 # .devcontainer/docker-compose.cloud.yml (nginx).
@@ -151,7 +165,7 @@ fi
 
 
 # ***************************************************************
-# ***************** 5. Session instructions for Claude **********
+# ***************** 6. Session instructions for Claude **********
 # ***************************************************************
 # Cloud sessions start in the parent folder of the cloned repositories,
 # so hospitia-master/CLAUDE.md is not loaded at startup. Hooks can't run
