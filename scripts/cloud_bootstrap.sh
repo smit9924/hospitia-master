@@ -32,9 +32,10 @@
 #   PARENT/hospitia-master/frontend  ->  PARENT/hospitia-frontend
 #   PARENT/hospitia-master/backend   ->  PARENT/hospitia-backend
 #
-# Backend .env files are created from each service's
-# .sample.cloud-dev.env (localhost hosts), so the cloud environment
-# needs no environment variables.
+# .env files (.devcontainer and each backend service) are created from
+# .sample.cloud-dev.env, the cloud variant of .sample.env, so the cloud
+# environment needs no environment variables and .sample.env stays
+# untouched for local development.
 #
 # Environment overrides:
 #   FRONTEND_REPO   Sibling folder name of the frontend repo (default: hospitia-frontend)
@@ -184,22 +185,30 @@ linkSiblingRepository() {
 copySampleEnv() {
     # -------------------------------------------------------------
     # copySampleEnv
-    # Description: Copies <dir>/<sample> to <dir>/.env if .env is
+    # Description: Creates <dir>/.env from a sample file if .env is
     #              missing. .env files are gitignored, so a fresh clone
     #              never has them.
-    # Arguments: $1 → directory containing the sample file
-    #            $2 → sample file name (optional, default: .sample.env)
+    #              Prefers .sample.cloud-dev.env: the cloud variant of
+    #              .sample.env with the values that differ in the cloud.
+    #              .sample.env itself is never changed for the cloud, so
+    #              the local setup keeps using it as is. Falls back to
+    #              .sample.env where no cloud variant exists.
+    # Arguments: $1 → directory containing the sample file(s)
     # Output: None
     # -------------------------------------------------------------
     local dir="$1"
-    local sample="${2:-.sample.env}"
+    local sample=".sample.cloud-dev.env"
 
     if [[ -f "$dir/.env" ]]; then
         return
     fi
 
     if [[ ! -f "$dir/$sample" ]]; then
-        log "No $sample in $dir. Skipping."
+        sample=".sample.env"
+    fi
+
+    if [[ ! -f "$dir/$sample" ]]; then
+        log "No .sample.cloud-dev.env or .sample.env in $dir. Skipping."
         return
     fi
 
@@ -514,26 +523,23 @@ linkSiblingRepository "backend" "$BACKEND_REPO"
 # ***************************************************************
 # ***************** 2. Environment files ************************
 # ***************************************************************
+# Each .env comes from the directory's .sample.cloud-dev.env (see
+# copySampleEnv), which matches its .sample.env except for values that
+# differ in the cloud. This way the cloud environment needs no env vars.
+
 # docker-compose.yml requires .devcontainer/.env (project_name, RabbitMQ
-# and Mailpit credentials), same as the local setup.
+# and Mailpit credentials). Its cloud variant uses absolute Mailpit paths
+# under /data, where the relative local paths crash Mailpit.
 copySampleEnv "$DEVCONTAINER_DIR"
 
 # Each backend service loads its settings from services/<name>/.env and
-# fails at startup if required values are missing. Use the service's
-# .sample.cloud-dev.env, which matches .sample.env except that the
-# Postgres/RabbitMQ/SMTP hosts are localhost instead of dev-net Docker
-# hostnames. This way the cloud environment needs no env vars. Fall
-# back to .sample.env for services that have no cloud-dev sample.
+# fails at startup if required values are missing. Their cloud variants
+# point Postgres/RabbitMQ/SMTP at localhost instead of dev-net Docker
+# hostnames.
 for service_dir in "$ROOT"/backend/services/*/; do
     # The glob stays literal when nothing matches. Skip that case.
     [[ -d "$service_dir" ]] || continue
-    service_dir="${service_dir%/}"
-
-    if [[ -f "$service_dir/.sample.cloud-dev.env" ]]; then
-        copySampleEnv "$service_dir" ".sample.cloud-dev.env"
-    else
-        copySampleEnv "$service_dir"
-    fi
+    copySampleEnv "${service_dir%/}"
 done
 
 
