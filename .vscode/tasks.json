@@ -72,6 +72,8 @@
                 "dev",
                 "--port",
                 "8000",
+                "--reload-dir",
+                "auth",
                 "auth/main.py"
             ],
             "options": {
@@ -148,6 +150,8 @@
                 "dev",
                 "--port",
                 "8002",
+                "--reload-dir",
+                "notification",
                 "notification/main.py"
             ],
             "options": {
@@ -196,6 +200,8 @@
                 "dev",
                 "--port",
                 "8004",
+                "--reload-dir",
+                "booking",
                 "booking/main.py"
             ],
             "options": {
@@ -272,6 +278,8 @@
                 "dev",
                 "--port",
                 "8006",
+                "--reload-dir",
+                "payment",
                 "payment/main.py"
             ],
             "options": {
@@ -348,6 +356,8 @@
                 "dev",
                 "--port",
                 "8005",
+                "--reload-dir",
+                "dashboard",
                 "dashboard/main.py"
             ],
             "options": {

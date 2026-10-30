@@ -9,6 +9,8 @@
             "args": [
                 "auth.main:app",
                 "--reload",
+                "--reload-dir",
+                "auth",
                 "--port",
                 "8000"
             ],
@@ -24,6 +26,8 @@
             "args": [
                 "notification.main:app",
                 "--reload",
+                "--reload-dir",
+                "notification",
                 "--port",
                 "8002"
             ],
@@ -39,6 +43,8 @@
             "args": [
                 "booking.main:app",
                 "--reload",
+                "--reload-dir",
+                "booking",
                 "--port",
                 "8004"
             ],
@@ -54,6 +60,8 @@
             "args": [
                 "payment.main:app",
                 "--reload",
+                "--reload-dir",
+                "payment",
                 "--port",
                 "8006"
             ],
@@ -69,6 +77,8 @@
             "args": [
                 "dashboard.main:app",
                 "--reload",
+                "--reload-dir",
+                "dashboard",
                 "--port",
                 "8005"
             ],

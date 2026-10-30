@@ -266,7 +266,7 @@ Applies when `CLAUDE_CODE_REMOTE=true`. Repos are cloned as siblings (`hospitia-
 ```bash
 uv sync
 uv run alembic -c ./<svc>/database/alembic.ini upgrade head   # the bootstrap already did this; re-run after adding a migration (not for notification: no DB)
-uv run uvicorn <svc>.main:app --reload --port <port>          # auth 8000, notification 8003, booking 8004, dashboard 8005, payment 8006
+uv run uvicorn <svc>.main:app --reload --reload-dir <svc> --port <port>  # auth 8000, notification 8003, booking 8004, dashboard 8005, payment 8006
 uv run pytest                                                 # tests use in-memory SQLite
 ```
 
