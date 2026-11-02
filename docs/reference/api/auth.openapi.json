@@ -1,0 +1,2481 @@
+{
+  "components": {
+    "schemas": {
+      "AccessToken": {
+        "description": "Access token response schema.\n\nRepresents the access token issued after successful authentication.\n\nAttributes\n----------\naccess_token : str\n    JWT access token used for authenticated requests.\naccess_token_expiry : datetime\n    Expiration timestamp of the access token (UTC).\ntoken_type : str\n    Token scheme used for authentication (e.g., \"bearer\").",
+        "properties": {
+          "accessToken": {
+            "title": "Accesstoken",
+            "type": "string"
+          },
+          "accessTokenExpiry": {
+            "format": "date-time",
+            "title": "Accesstokenexpiry",
+            "type": "string"
+          },
+          "tokenType": {
+            "title": "Tokentype",
+            "type": "string"
+          }
+        },
+        "required": [
+          "accessToken",
+          "accessTokenExpiry",
+          "tokenType"
+        ],
+        "title": "AccessToken",
+        "type": "object"
+      },
+      "ApiErrorResponse_NoneType_": {
+        "properties": {
+          "errorCode": {
+            "$ref": "#/components/schemas/ErrorCodes"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "metadata": {
+            "title": "Metadata",
+            "type": "null"
+          }
+        },
+        "required": [
+          "metadata",
+          "message",
+          "errorCode"
+        ],
+        "title": "ApiErrorResponse[NoneType]",
+        "type": "object"
+      },
+      "Body_login_access_token_api_v1_login_access_token_post": {
+        "properties": {
+          "client_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Id"
+          },
+          "client_secret": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "format": "password",
+            "title": "Client Secret"
+          },
+          "grant_type": {
+            "anyOf": [
+              {
+                "pattern": "^password$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grant Type"
+          },
+          "password": {
+            "format": "password",
+            "title": "Password",
+            "type": "string"
+          },
+          "scope": {
+            "default": "",
+            "title": "Scope",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "Body_login_access_token_api_v1_login_access_token_post",
+        "type": "object"
+      },
+      "Body_login_user_api_v1_login_post": {
+        "properties": {
+          "client_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Id"
+          },
+          "client_secret": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "format": "password",
+            "title": "Client Secret"
+          },
+          "grant_type": {
+            "anyOf": [
+              {
+                "pattern": "^password$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grant Type"
+          },
+          "password": {
+            "format": "password",
+            "title": "Password",
+            "type": "string"
+          },
+          "remember_me": {
+            "default": false,
+            "title": "Remember Me",
+            "type": "boolean"
+          },
+          "scope": {
+            "default": "",
+            "title": "Scope",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "Body_login_user_api_v1_login_post",
+        "type": "object"
+      },
+      "ChangePassword": {
+        "properties": {
+          "currentPassword": {
+            "title": "Currentpassword",
+            "type": "string"
+          },
+          "newPassword": {
+            "title": "Newpassword",
+            "type": "string"
+          }
+        },
+        "required": [
+          "currentPassword",
+          "newPassword"
+        ],
+        "title": "ChangePassword",
+        "type": "object"
+      },
+      "ErrorCodes": {
+        "enum": [
+          1001,
+          1002,
+          1003,
+          1004,
+          1005,
+          1006,
+          1007,
+          1008,
+          1009,
+          1010,
+          1011,
+          1012,
+          1013
+        ],
+        "title": "ErrorCodes",
+        "type": "integer"
+      },
+      "ForgotPasswordRequest": {
+        "description": "Schema for forgot password request.\n\nRepresents the payload required to initiate a password reset process.\n\nAttributes\n----------\nemail : str\n    The email address of the user requesting a password reset.",
+        "properties": {
+          "email": {
+            "title": "Email",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email"
+        ],
+        "title": "ForgotPasswordRequest",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "ManagerCreateRequest": {
+        "description": "Payload for creating a MANAGER user.\n\n`organization_guid` is forwarded to the Booking Service in the\nuser-created event, which maps the new manager to that organization.\nAuth does not validate it because it holds no organization data.",
+        "properties": {
+          "email": {
+            "format": "email",
+            "title": "Email",
+            "type": "string"
+          },
+          "firstName": {
+            "title": "Firstname",
+            "type": "string"
+          },
+          "lastName": {
+            "title": "Lastname",
+            "type": "string"
+          },
+          "organizationGuid": {
+            "format": "uuid",
+            "title": "Organizationguid",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "email",
+          "username",
+          "organizationGuid"
+        ],
+        "title": "ManagerCreateRequest",
+        "type": "object"
+      },
+      "ProfileData": {
+        "properties": {
+          "email": {
+            "format": "email",
+            "title": "Email",
+            "type": "string"
+          },
+          "firstName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Firstname"
+          },
+          "guid": {
+            "title": "Guid",
+            "type": "string"
+          },
+          "isEmailVerified": {
+            "default": false,
+            "title": "Isemailverified",
+            "type": "boolean"
+          },
+          "lastName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastname"
+          },
+          "role": {
+            "$ref": "#/components/schemas/UserType"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "username",
+          "role",
+          "guid"
+        ],
+        "title": "ProfileData",
+        "type": "object"
+      },
+      "ProfileUpdate": {
+        "properties": {
+          "firstName": {
+            "title": "Firstname",
+            "type": "string"
+          },
+          "lastName": {
+            "title": "Lastname",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "firstName",
+          "lastName"
+        ],
+        "title": "ProfileUpdate",
+        "type": "object"
+      },
+      "RefreshTokenRequest": {
+        "description": "Refresh token request schema.\n\nRepresents the payload required to refresh an access token using a valid refresh token.\n\nAttributes\n----------\nrefresh_token : str\n    The JWT refresh token used to obtain a new access token.",
+        "properties": {
+          "refreshToken": {
+            "title": "Refreshtoken",
+            "type": "string"
+          }
+        },
+        "required": [
+          "refreshToken"
+        ],
+        "title": "RefreshTokenRequest",
+        "type": "object"
+      },
+      "ResetPasswordRequest": {
+        "description": "Schema for reset password request.\n\nRepresents the payload required to complete a password reset process.\n\nAttributes\n----------\ntoken : str\n    The password reset token sent to the user's email.\nnew_password : str\n    The new password that the user wants to set.",
+        "properties": {
+          "newPassword": {
+            "title": "Newpassword",
+            "type": "string"
+          },
+          "token": {
+            "title": "Token",
+            "type": "string"
+          }
+        },
+        "required": [
+          "token",
+          "newPassword"
+        ],
+        "title": "ResetPasswordRequest",
+        "type": "object"
+      },
+      "Token": {
+        "description": "Authentication token response schema.\n\nRepresents the access token issued after successful authentication.\n\nAttributes\n----------\naccess_token : str\n    JWT access token used for authenticated requests (from parent class AccessToken).\naccess_token_expiry : datetime\n    Expiration timestamp of the access token (UTC) (from parent class AccessToken).\nrefresh_token : str\n    JWT refresh token used to obtain new access tokens after expiration.\nrefresh_token_expiry : datetime\n    Expiration timestamp of the refresh token (UTC).\ntoken_type : str\n    Token scheme used for authentication (e.g., \"bearer\") (from parent class AccessToken).",
+        "properties": {
+          "accessToken": {
+            "title": "Accesstoken",
+            "type": "string"
+          },
+          "accessTokenExpiry": {
+            "format": "date-time",
+            "title": "Accesstokenexpiry",
+            "type": "string"
+          },
+          "refreshToken": {
+            "title": "Refreshtoken",
+            "type": "string"
+          },
+          "refreshTokenExpiry": {
+            "format": "date-time",
+            "title": "Refreshtokenexpiry",
+            "type": "string"
+          },
+          "tokenType": {
+            "title": "Tokentype",
+            "type": "string"
+          }
+        },
+        "required": [
+          "accessToken",
+          "accessTokenExpiry",
+          "tokenType",
+          "refreshToken",
+          "refreshTokenExpiry"
+        ],
+        "title": "Token",
+        "type": "object"
+      },
+      "UserCreateRequest": {
+        "description": "Payload for creating a user by an authorized admin/owner/manager.\n\nPassword is generated by the backend and delivered via welcome email.",
+        "properties": {
+          "email": {
+            "format": "email",
+            "title": "Email",
+            "type": "string"
+          },
+          "firstName": {
+            "title": "Firstname",
+            "type": "string"
+          },
+          "lastName": {
+            "title": "Lastname",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "email",
+          "username"
+        ],
+        "title": "UserCreateRequest",
+        "type": "object"
+      },
+      "UserSignup": {
+        "properties": {
+          "email": {
+            "format": "email",
+            "title": "Email",
+            "type": "string"
+          },
+          "firstName": {
+            "title": "Firstname",
+            "type": "string"
+          },
+          "lastName": {
+            "title": "Lastname",
+            "type": "string"
+          },
+          "password": {
+            "title": "Password",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "email",
+          "username",
+          "password"
+        ],
+        "title": "UserSignup",
+        "type": "object"
+      },
+      "UserType": {
+        "description": "User role types for role-based access control (RBAC).\n\nThis enum defines user permission levels in the system hierarchy.\nValues are stored as integers in the database for efficiency.\n\nAttributes\n----------\nADMIN : int\n    System administrator with full access to all features and settings.\n    Can manage all users, content, and system configurations.\n    Value: 1\nOWNER : int\n    Business or organization owner with elevated privileges. Can manage\n    organizational settings and create users under organization.\n    Value: 2\nMANAGER : int\n    Manager role with permissions to oversee specific areas or teams.\n    Can manage customers and content within their assigned scope.\n    Value: 3\nCUSTOMER : int\n    End user or client with standard access to services and features.\n    Value: 4\nINTERNALE : int\n    Reserved role for authenticated internal API callers. This role must\n    not be exposed through public user creation or public API access.\n    Value: 5",
+        "enum": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "title": "UserType",
+        "type": "integer"
+      },
+      "UserUpdateRequest": {
+        "description": "Payload for updating a provisioned user by an authorized actor.\n\nGUID identifies the target user and is sent in the body, not the URL.",
+        "properties": {
+          "firstName": {
+            "title": "Firstname",
+            "type": "string"
+          },
+          "guid": {
+            "title": "Guid",
+            "type": "string"
+          },
+          "lastName": {
+            "title": "Lastname",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "firstName",
+          "lastName",
+          "guid"
+        ],
+        "title": "UserUpdateRequest",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "VerifyEmailOtpRequest": {
+        "properties": {
+          "otp": {
+            "title": "Otp",
+            "type": "string"
+          },
+          "refreshToken": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Refreshtoken"
+          }
+        },
+        "required": [
+          "otp"
+        ],
+        "title": "VerifyEmailOtpRequest",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "OAuth2PasswordBearer": {
+        "flows": {
+          "password": {
+            "scopes": {},
+            "tokenUrl": "/api/v1/login/access-token"
+          }
+        },
+        "type": "oauth2"
+      }
+    }
+  },
+  "info": {
+    "title": "Hospitia auth service API",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Root"
+      }
+    },
+    "/api/v1/login": {
+      "post": {
+        "description": "Authenticate a user and issue an OAuth2 access token.",
+        "operationId": "login_user_api_v1_login_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_login_user_api_v1_login_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1006,
+                  "message": "Incorrect username or password.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Incorrect username/email or password."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1006,
+                  "message": "Your account is inactive. Please contact support or activate your account.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "User account is inactive."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Login User",
+        "tags": [
+          "login"
+        ]
+      }
+    },
+    "/api/v1/login/access-token": {
+      "post": {
+        "description": "Authenticate a user and return an OAuth2 access token.\n\nNotes:\n------\n- This endpoint follows OAuth2 specifications, which require certain fields\nto use standard naming conventions(specifically in camel-case).\n- It is kept separate primarily for compatibility with Swagger UI and\nOAuth2 form-based authentication flow.",
+        "operationId": "login_access_token_api_v1_login_access_token_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_login_access_token_api_v1_login_access_token_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1006,
+                  "message": "Incorrect username or password.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Incorrect username/email or password."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1006,
+                  "message": "Your account is inactive. Please contact support or activate your account.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "User account is inactive."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Login Access Token",
+        "tags": [
+          "login"
+        ]
+      }
+    },
+    "/api/v1/login/forgot-password": {
+      "post": {
+        "description": "Handle user requests for password reset.\n\nThis endpoint initiates the password reset process by accepting a user's\nemail address or username. It verifies the existence of the user and,\nif found, triggers the sending of a password reset email containing a\nsecure, time-limited token. This allows users to securely reset their\npasswords without exposing sensitive information.",
+        "operationId": "forgot_password_api_v1_login_forgot_password_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Forgot Password Api V1 Login Forgot Password Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Forgot Password",
+        "tags": [
+          "login"
+        ]
+      }
+    },
+    "/api/v1/login/refresh-token": {
+      "post": {
+        "description": "Refresh an expired access token using a valid refresh token.\n\nValidates the provided JWT refresh token and, if valid, issues a new\nJWT access token with updated expiration. Claims are built from the\nuser's current state, so role or email verification changes apply on\nthe next refresh. Missing, deleted or inactive users are rejected.",
+        "operationId": "refresh_access_token_api_v1_login_refresh_token_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessToken"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1004,
+                  "message": "You are not authorized to perform this action. Please authenticate and try again.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Authentication failed or user is not authorized to access this resource."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Refresh Access Token",
+        "tags": [
+          "login"
+        ]
+      }
+    },
+    "/api/v1/login/reset-password": {
+      "post": {
+        "description": "Handle user requests to reset their password.\n\nThis endpoint accepts a secure token and a new password. It validates the\ntoken to ensure it is valid, not expired, and has not been used. If the\ntoken is valid, the user's password is updated to the new password, and\nthe token is marked as used to prevent reuse. This allows users to securely\nreset their passwords while ensuring that tokens cannot be exploited.",
+        "operationId": "reset_password_api_v1_login_reset_password_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Reset Password Api V1 Login Reset Password Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1005,
+                  "message": "Invalid token. Please provide a valid token and try again.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Provided token is invalid, expired, or malformed."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1008,
+                  "message": "The provided password is too weak. Password must be at least 8 characters long and include uppercase letters, lowercase letters, numbers, and special characters.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Provided password does not meet strength requirements."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reset Password",
+        "tags": [
+          "login"
+        ]
+      }
+    },
+    "/api/v1/users/admins": {
+      "post": {
+        "description": "Create a new ADMIN user. Password is generated and emailed.",
+        "operationId": "create_admin_api_v1_users_admins_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileData"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1009,
+                  "message": "The provided username is invalid. Please choose a different username.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Provided username is invalid."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Create Admin",
+        "tags": [
+          "users"
+        ]
+      },
+      "put": {
+        "description": "Update an ADMIN user's profile fields.",
+        "operationId": "update_admin_api_v1_users_admins_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileData"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1007,
+                  "message": "The requested user was not found.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "The requested user was not found."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1003,
+                  "message": "A user with the provided username already exists.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "User with given username already exists."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Update Admin",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/users/admins/{guid}": {
+      "get": {
+        "description": "Retrieve an ADMIN user by GUID.",
+        "operationId": "get_admin_api_v1_users_admins__guid__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "guid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Guid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileData"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1007,
+                  "message": "The requested user was not found.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "The requested user was not found."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Get Admin",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/users/change-password": {
+      "put": {
+        "description": "Change the password for the authenticated user.",
+        "operationId": "change_password_api_v1_users_change_password_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePassword"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1006,
+                  "message": "Incorrect username or password.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Incorrect username/email or password."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1007,
+                  "message": "The requested user was not found.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "The requested user was not found."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1008,
+                  "message": "The provided password is too weak. Password must be at least 8 characters long and include uppercase letters, lowercase letters, numbers, and special characters.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Provided password does not meet strength requirements."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Change Password",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/users/check-username-availability": {
+      "get": {
+        "description": "Check if a username is available for registration.",
+        "operationId": "check_username_availability_api_v1_users_check_username_availability_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "username",
+            "required": true,
+            "schema": {
+              "title": "Username",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1009,
+                  "message": "The provided username is invalid. Please choose a different username.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Provided username is invalid."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Check Username Availability",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/users/customers": {
+      "post": {
+        "description": "Create a new CUSTOMER user. Password is generated and emailed.",
+        "operationId": "create_customer_api_v1_users_customers_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileData"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1009,
+                  "message": "The provided username is invalid. Please choose a different username.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Provided username is invalid."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Create Customer",
+        "tags": [
+          "users"
+        ]
+      },
+      "put": {
+        "description": "Update a CUSTOMER user's profile fields.",
+        "operationId": "update_customer_api_v1_users_customers_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileData"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1007,
+                  "message": "The requested user was not found.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "The requested user was not found."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1003,
+                  "message": "A user with the provided username already exists.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "User with given username already exists."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Update Customer",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/users/customers/{guid}": {
+      "get": {
+        "description": "Retrieve a CUSTOMER user by GUID.",
+        "operationId": "get_customer_api_v1_users_customers__guid__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "guid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Guid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileData"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1007,
+                  "message": "The requested user was not found.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "The requested user was not found."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Get Customer",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/users/internal/admins": {
+      "post": {
+        "description": "Create an ADMIN user from a caller on the internal network.",
+        "operationId": "create_internal_admin_api_v1_users_internal_admins_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileData"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1004,
+                  "message": "You are not authorized to perform this action. Please authenticate and try again.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Authentication failed or user is not authorized to access this resource."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1009,
+                  "message": "The provided username is invalid. Please choose a different username.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Provided username is invalid."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Internal Admin",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/users/internal/admins/{guid}": {
+      "delete": {
+        "description": "Soft-delete an ADMIN user from the local VM.",
+        "operationId": "delete_internal_admin_api_v1_users_internal_admins__guid__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "guid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Guid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1004,
+                  "message": "You are not authorized to perform this action. Please authenticate and try again.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Authentication failed or user is not authorized to access this resource."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1007,
+                  "message": "The requested user was not found.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "The requested user was not found."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Internal Admin",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/users/list": {
+      "get": {
+        "operationId": "get_user_list_api_v1_users_list_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Get User List",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/users/managers": {
+      "post": {
+        "description": "Create a new MANAGER user. Password is generated and emailed.\n\n`organizationGuid` is forwarded to the Booking Service, which maps the\nmanager to that organization after validating it.",
+        "operationId": "create_manager_api_v1_users_managers_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManagerCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileData"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1009,
+                  "message": "The provided username is invalid. Please choose a different username.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Provided username is invalid."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Create Manager",
+        "tags": [
+          "users"
+        ]
+      },
+      "put": {
+        "description": "Update a MANAGER user's profile fields.",
+        "operationId": "update_manager_api_v1_users_managers_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileData"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1007,
+                  "message": "The requested user was not found.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "The requested user was not found."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1003,
+                  "message": "A user with the provided username already exists.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "User with given username already exists."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Update Manager",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/users/managers/{guid}": {
+      "get": {
+        "description": "Retrieve a MANAGER user by GUID.",
+        "operationId": "get_manager_api_v1_users_managers__guid__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "guid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Guid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileData"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1007,
+                  "message": "The requested user was not found.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "The requested user was not found."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Get Manager",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/users/owners": {
+      "post": {
+        "description": "Create a new OWNER user. Password is generated and emailed.",
+        "operationId": "create_owner_api_v1_users_owners_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileData"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1009,
+                  "message": "The provided username is invalid. Please choose a different username.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Provided username is invalid."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Create Owner",
+        "tags": [
+          "users"
+        ]
+      },
+      "put": {
+        "description": "Update an OWNER user's profile fields.",
+        "operationId": "update_owner_api_v1_users_owners_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileData"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1007,
+                  "message": "The requested user was not found.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "The requested user was not found."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1003,
+                  "message": "A user with the provided username already exists.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "User with given username already exists."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Update Owner",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/users/owners/{guid}": {
+      "get": {
+        "description": "Retrieve an OWNER user by GUID.",
+        "operationId": "get_owner_api_v1_users_owners__guid__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "guid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Guid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileData"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1007,
+                  "message": "The requested user was not found.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "The requested user was not found."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Get Owner",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/users/profile": {
+      "get": {
+        "description": "Retrieve the profile data for the authenticated user.",
+        "operationId": "get_profile_data_api_v1_users_profile_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileData"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1007,
+                  "message": "The requested user was not found.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "The requested user was not found."
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Get Profile Data",
+        "tags": [
+          "users"
+        ]
+      },
+      "post": {
+        "description": "Update the profile data for the authenticated user.",
+        "operationId": "update_profile_data_api_v1_users_profile_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProfileUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileData"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1007,
+                  "message": "The requested user was not found.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "The requested user was not found."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1003,
+                  "message": "A user with the provided username already exists.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "User with given username already exists."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Update Profile Data",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/users/request-email-verification-otp": {
+      "post": {
+        "description": "Request an OTP for verifying the authenticated user's email address.",
+        "operationId": "request_email_verification_otp_endpoint_api_v1_users_request_email_verification_otp_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Request Email Verification Otp Endpoint Api V1 Users Request Email Verification Otp Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1004,
+                  "message": "You are not authorized to perform this action. Please authenticate and try again.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Authentication failed or user is not authorized to access this resource."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1007,
+                  "message": "The requested user was not found.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "The requested user was not found."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1012,
+                  "message": "Your email address has already been verified.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "User email is already verified."
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Request Email Verification Otp Endpoint",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/users/signup": {
+      "post": {
+        "description": "Register a new OWNER user and authenticate them.\n\nCreates a new user account with OWNER user type using the provided\nregistration details. Upon successful registration, the user is\nautomatically authenticated and a JWT access token and refresh token are returned.",
+        "operationId": "signup_api_v1_users_signup_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSignup"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1009,
+                  "message": "The provided username is invalid. Please choose a different username.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Provided username is invalid."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Signup",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/users/signup-customer": {
+      "post": {
+        "description": "Register a new CUSTOMER user and authenticate them.\n\nCreates a new user account with CUSTOMER user type using the provided\nregistration details. Upon successful registration, the user is\nautomatically authenticated and a JWT access token and refresh token are returned.",
+        "operationId": "signup_customer_api_v1_users_signup_customer_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSignup"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1009,
+                  "message": "The provided username is invalid. Please choose a different username.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Provided username is invalid."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Signup Customer",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/users/verify-email-otp": {
+      "post": {
+        "description": "Verify the authenticated user's email address using an OTP.\n\nOn success, a fresh access token and refresh token carrying the verified\nemail state are returned. If the current refresh token is provided, the\nnew refresh token keeps its expiry.",
+        "operationId": "verify_email_otp_endpoint_api_v1_users_verify_email_otp_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyEmailOtpRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1013,
+                  "message": "The provided OTP is invalid or has expired.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Provided OTP is invalid or expired."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1005,
+                  "message": "Invalid token. Please provide a valid token and try again.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "Provided token is invalid, expired, or malformed."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1007,
+                  "message": "The requested user was not found.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "The requested user was not found."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "errorCode": 1012,
+                  "message": "Your email address has already been verified.",
+                  "metadata": "None"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse_NoneType_"
+                }
+              }
+            },
+            "description": "User email is already verified."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Verify Email Otp Endpoint",
+        "tags": [
+          "users"
+        ]
+      }
+    }
+  }
+}

@@ -27,3 +27,6 @@ server-setup/alloy/data/**
 # No trailing slash, so symlinks are matched too.
 /frontend
 /backend
+
+# MkDocs build output (scripts/check_docs.sh builds into a temp dir; `mkdocs build` writes here)
+/site/
