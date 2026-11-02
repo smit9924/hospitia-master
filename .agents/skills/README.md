@@ -13,3 +13,4 @@ Shared, tool-agnostic skills that follow the open [Agent Skills specification](h
 | Skill | Purpose |
 |---|---|
 | [`requirement-gathering`](requirement-gathering/SKILL.md) | Interactive requirement gathering, producing `.requirements/<id>/README.md` and an optional Trello-ready `TICKET.md` |
+| [`doc-sync`](doc-sync/SKILL.md) | Brings `docs/`, the changelog, the API reference, agent rules and README stubs in line with what changed in all three repositories since the last sync; never commits |
