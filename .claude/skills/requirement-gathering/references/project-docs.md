@@ -15,7 +15,7 @@ This file is the only place where the skill is wired to a specific project. It s
 
 **Requirements folder:** `.requirements/` at the workspace root, which is the umbrella directory containing both repositories.
 
-**Docs.** The central documentation in `docs/` (index: `docs/index.md`) is the source of truth; prefer it over every other file. Agent rules (`CLAUDE.md`, `.cursor/rules/*.mdc`) summarize the same conventions for coding agents and link to these pages.
+**Docs.** The central documentation in `docs/` (index: `docs/index.md`) is the source of truth; prefer it over every other file. Agent rules (`.agents/rules/*.md`, generated into `.claude/rules/` and `.cursor/rules/`; index in `CLAUDE.md`) summarize the same conventions for coding agents and link to these pages.
 
 | Topic | Where to read |
 |---|---|
@@ -23,7 +23,7 @@ This file is the only place where the skill is wired to a specific project. It s
 | Purpose, features, glossary | `docs/about/` (`vision.md`, `features.md`, `glossary.md`) |
 | Workspace layout and architecture | `docs/architecture/` (`workspace.md`, `services.md`, `auth-and-roles.md`, `messaging.md`, `data.md`, `active-organization.md`, `frontend.md`) |
 | Decision records | `docs/adr/` |
-| Coding standards and agent conventions | `docs/standards/` (`general.md`, `architecture.md`, `backend.md`, `frontend-angular.md`, `html-and-scss.md`, `accessibility.md`, `git.md`, `documentation.md`) |
+| Coding standards and agent conventions | `docs/standards/` (`general.md`, `architecture.md`, `backend.md`, `frontend-angular.md`, `html-and-scss.md`, `accessibility.md`, `git.md`, `documentation.md`, `ai-agents.md`); short per-area rules in `.agents/rules/` |
 | Backend overview | `docs/backend/index.md` |
 | A backend service | `docs/backend/<service>.md`; endpoints in `docs/reference/api/<service>.md` |
 | Frontend: structure, UI/SCSS, Angular, accessibility, theming | `docs/frontend/` and `docs/standards/frontend-angular.md`, `docs/standards/html-and-scss.md` |

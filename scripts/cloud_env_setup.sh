@@ -187,8 +187,9 @@ cat > "$HOME/.claude/CLAUDE.md" <<'EOF'
   nginx. It's safe to re-run.
 - Run it again whenever the session is reopened after it expired. A reopened
   session gets a fresh VM, so dockerd and the containers are no longer running.
-- Then read `hospitia-master/CLAUDE.md` for project rules, service endpoints
-  and dev-server commands. Work through the `hospitia-master/frontend` and
+- Then read `hospitia-master/CLAUDE.md` and the rule files it routes you to
+  (`hospitia-master/.claude/rules/`) for project rules, service endpoints and
+  dev-server commands. Work through the `hospitia-master/frontend` and
   `hospitia-master/backend` paths so the project instructions apply.
 EOF
 

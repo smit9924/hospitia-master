@@ -11,7 +11,7 @@ How Hospitia's documentation is organized, written and kept correct. Follow this
 | Community files | `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md` in `hospitia-master` (short pointer copies in the other repositories) |
 | Changelog | `hospitia-master/CHANGELOG.md` (one for the whole product) |
 | Repository and service READMEs in `hospitia-frontend` / `hospitia-backend` | **Short stubs only**: purpose, port, run and test commands, and a link to the docs page. No other content. |
-| Rules for AI coding agents | `hospitia-master/.agents/rules/`, linking to these pages |
+| Rules for AI coding agents | `hospitia-master/.agents/rules/`, linking to these pages; see [AI coding agents](ai-agents.md) |
 
 Don't add documentation anywhere else. In particular, don't grow the stub READMEs: put the content in `docs/` and link to it.
 
@@ -78,7 +78,7 @@ Never put secrets, tokens, real passwords, private keys or `.env` values in docu
 # live preview at http://127.0.0.1:8000
 uv run --no-project --with-requirements docs/requirements.txt mkdocs serve
 
-# strict check before a pull request
+# strict check before a pull request (also checks agent rules and skills)
 bash scripts/check_docs.sh
 ```
 

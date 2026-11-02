@@ -12,10 +12,11 @@ These are the rules every change to Hospitia must follow, for people and AI codi
 | [Accessibility](accessibility.md) | AXE and WCAG AA requirements |
 | [Git and pull requests](git.md) | Branches, commits, pull requests, reviews, cross-repository changes |
 | [Documentation](documentation.md) | Where docs go, how to write them, how to keep them in sync |
+| [AI coding agents](ai-agents.md) | How agent rules are written, generated and loaded |
 
 ## How standards relate to agent rules
 
-AI coding agents (Claude Code, Cursor) read short rule files generated from `.agents/rules/`. Those rules state the must/must-not points and link here for the reasons and examples. These pages are the source of truth: if a rule and a page disagree, fix the rule.
+AI coding agents (Claude Code, Cursor) read short rule files generated from `.agents/rules/`. Those rules state the must/must-not points and link here for the reasons and examples. These pages are the source of truth: if a rule and a page disagree, fix the rule. See [AI coding agents](ai-agents.md).
 
 ## Changing a standard
 

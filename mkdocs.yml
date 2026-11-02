@@ -171,6 +171,7 @@ nav:
       - Accessibility: standards/accessibility.md
       - Git and pull requests: standards/git.md
       - Documentation: standards/documentation.md
+      - AI coding agents: standards/ai-agents.md
   - Operations:
       - operations/index.md
       - CI/CD with Jenkins: operations/ci-cd.md

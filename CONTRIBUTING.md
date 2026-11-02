@@ -75,7 +75,9 @@ See [Testing and linting](https://github.com/smit9924/hospitia-master/blob/main/
 
 ## Working with AI coding agents
 
-If you use Claude Code, Cursor or another agent, it follows the project rules in `CLAUDE.md` and `.agents/`. You're still responsible for every line you submit: review the agent's changes as carefully as your own.
+If you use Claude Code, Cursor or another agent, it follows the project rules in `CLAUDE.md` and `.agents/rules/`. You're still responsible for every line you submit: review the agent's changes as carefully as your own.
+
+To change a rule, edit `.agents/rules/<name>.md` and run `bash scripts/sync_agent_rules.sh`; never edit `.claude/rules/` or `.cursor/rules/` directly. See [AI coding agents](https://github.com/smit9924/hospitia-master/blob/main/docs/standards/ai-agents.md).
 
 ## Questions
 

@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
-# Check the documentation site.
+# Check the documentation site and the generated agent files.
 #
 # Runs a strict MkDocs build with the pinned dependencies from
 # docs/requirements.txt. The build fails on broken internal links, broken
 # anchors, and pages that exist under docs/ but are missing from the nav in
 # mkdocs.yml. The site is built into a temporary directory, so nothing in the
-# repository changes.
+# repository changes. It also checks that the generated agent rules
+# (scripts/sync_agent_rules.sh) and agent skills (scripts/sync_agent_skills.sh)
+# match their sources in .agents/.
 #
 # Usage:
 #   bash ./scripts/check_docs.sh
@@ -44,3 +46,11 @@ echo "Building docs (strict)..."
     mkdocs build --strict --site-dir "$site_dir"
 )
 echo "Docs build passed."
+
+echo "Checking agent rules..."
+bash "$ROOT_DIR/scripts/sync_agent_rules.sh" --check
+
+echo "Checking agent skills..."
+bash "$ROOT_DIR/scripts/sync_agent_skills.sh" --check
+
+echo "All documentation checks passed."
