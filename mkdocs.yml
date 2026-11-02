@@ -1,0 +1,196 @@
+# Hospitia documentation site.
+#
+# Preview:  uv run --no-project --with-requirements docs/requirements.txt mkdocs serve
+# Check:    bash ./scripts/check_docs.sh   (strict build: broken links and pages missing from nav fail)
+#
+# Every page under docs/ must be listed in `nav` below.
+# See docs/standards/documentation.md for how to add a page.
+
+site_name: Hospitia
+site_description: Guest house management for NGOs — project documentation
+repo_name: smit9924/hospitia-master
+repo_url: https://github.com/smit9924/hospitia-master
+edit_uri: edit/main/docs/
+docs_dir: docs
+strict: true
+
+exclude_docs: |
+  .sync-state.json
+  requirements.txt
+
+theme:
+  name: material
+  language: en
+  features:
+    - content.code.copy
+    - content.action.edit
+    - navigation.indexes
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - search.highlight
+    - search.suggest
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: green
+      accent: teal
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: green
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
+plugins:
+  - search
+  - neoteroi.mkdocsoad:
+      use_pymdownx: true
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path: ["."]
+      check_paths: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+validation:
+  nav:
+    omitted_files: warn
+    not_found: warn
+    absolute_links: info
+  links:
+    not_found: warn
+    anchors: warn
+    absolute_links: info
+    unrecognized_links: warn
+
+nav:
+  - Home: index.md
+  - About:
+      - about/index.md
+      - Vision and mission: about/vision.md
+      - Features: about/features.md
+      - Roadmap: about/roadmap.md
+      - Glossary: about/glossary.md
+  - Getting started:
+      - getting-started/index.md
+      - Prerequisites: getting-started/prerequisites.md
+      - Local setup (dev container): getting-started/local-setup.md
+      - Claude Code cloud sessions: getting-started/cloud-sessions.md
+      - Running the app: getting-started/running-the-app.md
+      - Local services and credentials: getting-started/local-services.md
+      - Troubleshooting: getting-started/troubleshooting.md
+  - Tutorials:
+      - tutorials/index.md
+      - Product tour: tutorials/product-tour.md
+      - Your first backend endpoint: tutorials/first-backend-endpoint.md
+      - Your first frontend page: tutorials/first-frontend-page.md
+      - Your first message flow: tutorials/first-message-flow.md
+  - Architecture:
+      - architecture/index.md
+      - Workspace and repositories: architecture/workspace.md
+      - Services: architecture/services.md
+      - Authentication and roles: architecture/auth-and-roles.md
+      - Messaging and events: architecture/messaging.md
+      - Data and databases: architecture/data.md
+      - Active organization: architecture/active-organization.md
+      - Frontend architecture: architecture/frontend.md
+  - Backend:
+      - backend/index.md
+      - Auth service: backend/auth.md
+      - Booking service: backend/booking.md
+      - Dashboard service: backend/dashboard.md
+      - Payment service: backend/payment.md
+      - Notification service: backend/notification.md
+  - Frontend:
+      - frontend/index.md
+      - Styling and theming: frontend/styling-and-theming.md
+      - Typography: frontend/typography.md
+      - Accessibility: frontend/accessibility.md
+      - Adding a client app: frontend/adding-a-client-app.md
+  - Guides:
+      - guides/index.md
+      - Database migrations: guides/database-migrations.md
+      - Exceptions and error codes: guides/exceptions-and-error-codes.md
+      - Publishing and consuming messages: guides/messaging.md
+      - Email templates: guides/email-templates.md
+      - Routes and guards: guides/routes-and-guards.md
+      - Testing and linting: guides/testing-and-linting.md
+      - Debugging: guides/debugging.md
+      - PgAdmin, Mailpit and RabbitMQ: guides/dev-tools.md
+  - Reference:
+      - reference/index.md
+      - Configuration: reference/configuration.md
+      - Ports and hostnames: reference/ports-and-hostnames.md
+      - Error codes: reference/error-codes.md
+      - Roles and permissions: reference/roles-and-permissions.md
+      - Scripts: reference/scripts.md
+      - API reference:
+          - reference/api/index.md
+          - Auth API: reference/api/auth.md
+          - Booking API: reference/api/booking.md
+          - Dashboard API: reference/api/dashboard.md
+          - Payment API: reference/api/payment.md
+  - Standards:
+      - standards/index.md
+      - General: standards/general.md
+      - Architecture: standards/architecture.md
+      - Backend (Python/FastAPI): standards/backend.md
+      - Frontend (Angular/TypeScript): standards/frontend-angular.md
+      - HTML and SCSS: standards/html-and-scss.md
+      - Accessibility: standards/accessibility.md
+      - Git and pull requests: standards/git.md
+      - Documentation: standards/documentation.md
+      - AI coding agents: standards/ai-agents.md
+  - Operations:
+      - operations/index.md
+      - CI/CD with Jenkins: operations/ci-cd.md
+      - Server setup and deployment: operations/deployment.md
+      - Observability: operations/observability.md
+      - Releasing and versioning: operations/releasing.md
+  - Decisions (ADR):
+      - adr/index.md
+      - ADR template: adr/template.md
+      - 0001 Multi-repo workspace: adr/0001-multi-repo-workspace.md
+      - 0002 Database per service with user replicas: adr/0002-database-per-service-with-user-replicas.md
+      - 0003 Transactional outbox in auth: adr/0003-transactional-outbox-in-auth.md
+      - 0004 Messaging abstraction over RabbitMQ: adr/0004-messaging-abstraction-over-rabbitmq.md
+      - 0005 Active organization header: adr/0005-active-organization-header.md
+      - 0006 MkDocs Material for documentation: adr/0006-mkdocs-material-for-documentation.md
+      - 0007 Single product changelog: adr/0007-single-product-changelog.md
+      - 0008 Generated OpenAPI reference: adr/0008-generated-openapi-reference.md
+  - Community:
+      - community/index.md
+      - Support: community/support.md
+      - Governance: community/governance.md
+  - Changelog: changelog.md

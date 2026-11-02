@@ -1,0 +1,6 @@
+# Documentation site dependencies (pinned). Used by scripts/check_docs.sh and
+# 'mkdocs serve'. Update deliberately and run scripts/check_docs.sh afterwards.
+mkdocs==1.6.1
+mkdocs-material==9.8.0
+pymdown-extensions==12.3
+neoteroi-mkdocs==1.2.0

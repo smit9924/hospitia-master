@@ -1,0 +1,26 @@
+---
+description: Claude Code cloud sessions (claude.ai/code) - bootstrap, tools and endpoints; applies only when CLAUDE_CODE_REMOTE=true
+---
+
+# Cloud sessions
+
+Applies only when `CLAUDE_CODE_REMOTE=true`. Repos are cloned as siblings (`hospitia-master/`, `hospitia-frontend/`, `hospitia-backend/`); there is no dev container, and the VM itself is the workspace.
+
+- **First, every session:** run `bash hospitia-master/scripts/cloud_bootstrap.sh` from the parent folder before any other work, and again after a reopened (expired) session. It's safe to re-run. Treat any non-zero exit as a broken setup and report it; don't work around it. Hooks don't run in multi-repo sessions, so run it yourself.
+- Work through the `hospitia-master/frontend` and `hospitia-master/backend` paths so the project rules apply.
+- **Node:** run `export PATH=/opt/node20/bin:$PATH` before any `npm` or `ng` command. **Python:** 3.13 via uv.
+- `.sample.env` is local-only and never changed for the cloud. Cloud differences live in `.sample.cloud-dev.env` next to it; keep each in sync with its `.sample.env` when you add or change keys.
+- Use `docker exec webapp-postgres psql -U postgres …` for SQL (the VM's `psql` 16 doesn't fully work with server 17).
+
+| Service | Endpoint | Local credentials |
+|---|---|---|
+| Postgres | `localhost:5432` (DBs `auth`, `booking`, `payment`, `dashboard`) | `postgres` / `password` |
+| RabbitMQ | `localhost:5672`, UI `http://localhost:15672` | `developer` / `password` |
+| Mailpit | SMTP `localhost:1025`, UI `http://localhost:8025` | `developer` / `password` |
+| PgAdmin | `http://localhost:8080` | `developer@domain.com` / `password` |
+
+- Backend: `cd backend/services/<svc> && uv run uvicorn <svc>.main:app --reload --reload-dir <svc> --port <port>` (auth 8000, booking 8004, dashboard 8005, payment 8006; notification has no HTTP routes, any free port such as 8003). Migrations already ran in the bootstrap; re-run `uv run alembic -c ./<svc>/database/alembic.ini upgrade head` after adding one.
+- Frontend: `cd frontend/clients/main && npm ci && npm start` (port 8001).
+- Use the nginx hostnames for browser and API testing: `http://main-client.localhost`, `http://auth.localhost`, `booking.localhost`, `dashboard.localhost`, `payment.localhost`, `mailpit.localhost`. A route returns 502 until its dev server runs.
+
+Details: `docs/getting-started/cloud-sessions.md`, `docs/getting-started/local-services.md`.

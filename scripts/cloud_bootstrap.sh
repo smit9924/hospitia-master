@@ -667,7 +667,7 @@ addLocalHostnames
 # ***************************************************************
 cat <<'EOF'
 
-[cloud-bootstrap] Done. All services are responding and all databases are migrated. Endpoints (credentials: see CLAUDE.md "Cloud sessions"):
+[cloud-bootstrap] Done. All services are responding and all databases are migrated. Endpoints (credentials: see hospitia-master/docs/getting-started/local-services.md):
   Postgres       localhost:5432
   RabbitMQ       localhost:5672   (management UI: http://localhost:15672)
   Mailpit SMTP   localhost:1025

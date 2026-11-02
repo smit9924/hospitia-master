@@ -1,0 +1,45 @@
+{
+  "info": {
+    "title": "Hospitia payment service API",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Root"
+      }
+    },
+    "/api/v1/login/health-check": {
+      "get": {
+        "description": "Check if the booking service is healthy.",
+        "operationId": "health_check_api_v1_login_health_check_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health Check",
+        "tags": [
+          "login"
+        ]
+      }
+    }
+  }
+}
