@@ -22,7 +22,7 @@ Rules for every change in every repository.
 
 ## Keep docs and changelog in step
 
-- Update the affected documentation pages in the same pull request as the code change (or run `/doc-sync` if available), and add a user-facing entry to the `[Unreleased]` section of `CHANGELOG.md`.
+- Update the affected documentation pages in the same pull request as the code change (or run `/doc-sync`; see [Keeping docs in sync](documentation.md#keeping-docs-in-sync)), and add a user-facing entry to the `[Unreleased]` section of `CHANGELOG.md`.
 - See [Documentation standards](documentation.md).
 
 ## Language and naming

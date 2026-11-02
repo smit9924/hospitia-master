@@ -63,7 +63,7 @@ See [Testing and linting](https://github.com/smit9924/hospitia-master/blob/main/
 
 ## 6. Update docs and the changelog
 
-- Update the affected pages in `hospitia-master/docs/` in the same change (or run `/doc-sync` if available). Don't add content to the README stubs in the frontend and backend repositories.
+- Update the affected pages in `hospitia-master/docs/` in the same change (or run the `/doc-sync` agent skill, or follow `.agents/skills/doc-sync/SKILL.md` with another agent). Don't add content to the README stubs in the frontend and backend repositories.
 - Add a user-facing entry under `[Unreleased]` in [`CHANGELOG.md`](CHANGELOG.md), with its area tag and pull request reference. See [Documentation standards](https://github.com/smit9924/hospitia-master/blob/main/docs/standards/documentation.md).
 
 ## 7. Open a pull request

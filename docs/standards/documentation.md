@@ -98,6 +98,17 @@ Add an entry to `[Unreleased]` in `CHANGELOG.md` for every user-visible or opera
 - [backend:booking] Rooms with number, floor, room type and status. (backend#5)
 ```
 
+## Keeping docs in sync
+
+Docs drift when code changes without them. Two habits prevent that:
+
+1. **Update docs with the change.** Every pull request that changes behaviour, APIs, configuration, structure or conventions updates the affected pages and adds a changelog entry.
+2. **Run `/doc-sync`.** The `doc-sync` agent skill (`.agents/skills/doc-sync/`) finds everything that changed in the three repositories since the last sync point, updates the docs, the API reference, the `[Unreleased]` changelog, the agent rules and the README stubs, runs `scripts/check_docs.sh`, and advances the sync point. It never commits: review its report and diff, then commit. Run it after merging features and before opening a pull request. With other agents, follow `.agents/skills/doc-sync/SKILL.md` as plain instructions.
+
+Useful variants: `/doc-sync --dry-run` (report only), `/doc-sync --repo backend` (one repository).
+
+Review the result like any other change: the skill takes facts only from the code and marks unknowns as TODOs, but it can still misread intent.
+
 ## Sync state
 
 `docs/.sync-state.json` records the commit of each repository that the docs were last brought up to date with:
@@ -113,4 +124,4 @@ Add an entry to `[Unreleased]` in `CHANGELOG.md` for every user-visible or opera
 }
 ```
 
-Update it only after checking that the docs match all three repositories at those commits. The file is excluded from the built site.
+The `doc-sync` skill reads it as the starting point and updates it after a successful run; update it by hand only after checking that the docs match all three repositories at those commits. Commits after the recorded SHA that only change the docs or the sync tooling are expected and count as "no doc impact". The file is excluded from the built site.
