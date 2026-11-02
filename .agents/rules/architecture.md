@@ -1,0 +1,21 @@
+---
+description: Architecture principles every change must respect, including internal-API rules
+---
+
+# Architecture principles
+
+Rules that keep Hospitia's structure consistent across all repositories.
+
+- **Multi-repo:** `frontend/` and `backend/` are separate Git repositories under `hospitia-master`. A change spanning them needs one branch (same name) and one pull request per repository.
+- **Multiple frontend apps:** new Angular applications belong under `frontend/clients/`.
+- **Service-oriented backend:** backend domains are separated into independent services, each with its own database. Never read or write another service's database; use events (user replica) or the owning service's API.
+- **Layered API:** follow `API → Services → Repositories → Database`; keep business and persistence logic out of route handlers.
+- **Messaging abstraction:** use the project's MQ abstraction; keep RabbitMQ-specific code inside its implementation layer (`messaging/rabbitmq/`).
+- **Centralized exceptions:** follow the existing service-level exception definition → handler → registration pattern.
+- **Configuration separation:** keep environment-specific configuration outside business logic; never hard-code secrets or environment-specific values.
+- **Existing patterns first:** before introducing a new pattern, inspect and follow the closest existing implementation.
+- **Internal APIs:** internal-only endpoints must validate the request source as a loopback address (`127.0.0.0/8` or `::1`) and must not require JWT or role validation.
+- **`UserType.INTERNALE`** is reserved for internal service-account data and must not be included in public role lists or assigned through public signup or user-provisioning flows.
+- A change that alters one of these principles, adds a service or introduces a new cross-cutting pattern needs an ADR in `docs/adr/`.
+
+Details: `docs/standards/architecture.md`, `docs/architecture/index.md`.

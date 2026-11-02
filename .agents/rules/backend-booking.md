@@ -1,0 +1,22 @@
+---
+description: Booking service - organizations, active organization, memberships and room setup
+paths:
+  - "backend/services/booking/**"
+---
+
+# Backend: booking service
+
+Organizations, organization types, memberships, currency units, room amenities, room types and rooms (`backend/services/booking/`, package `booking/booking/`, port 8004).
+
+- **Active organization:** owners and managers work in one organization, sent in `X-Active-Organization-Guid` (`booking.types.constants.ACTIVE_ORGANIZATION_HEADER`). Never trust it without validation:
+  - owner/manager-only endpoints depend on `ActiveOrganizationDep(roles)`;
+  - endpoints admins also use depend on `OrganizationScopedActorDep(roles)` (admins unscoped and choose the organization explicitly, e.g. `organizationGuid`; owners and managers scoped to their active organization).
+- Errors: missing/invalid header → `ACTIVE_ORGANIZATION_REQUIRED` (2012, 400); not found, inactive or not a member → `ACTIVE_ORGANIZATION_INVALID` (2013, 403), one code for all three so existence isn't revealed.
+- Every query for organization data filters by the resolved organization's internal id; never by a client-supplied id without validation.
+- Default room amenities (no organization) are admin-only; owners and managers manage their organization's amenities.
+- Records in use can't be removed (`*_IN_USE`); prefer deactivation.
+- User replica: `handlers/user_handlers.py` upserts `usersreplica` from `auth.user.created` and maps provisioned managers when `organization_guid` is valid and the creator is an admin or an active owner; otherwise it skips the mapping with a warning. Failures retry up to `USER_CREATED_RETRY_COUNT`, then go to the dead-letter queue.
+- New error codes use the next free 2xxx number.
+- `database/reference_data/` holds source files not loaded at runtime (ISO 4217 list used by the currency seed).
+
+Details: `docs/backend/booking.md`, `docs/architecture/active-organization.md`, `docs/reference/error-codes.md`.

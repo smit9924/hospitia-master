@@ -1,0 +1,25 @@
+---
+description: SQLModel models, relationships and Alembic migrations in backend services
+paths:
+  - "backend/services/*/*/database/**"
+---
+
+# Backend: models and migrations
+
+Rules for `database/models/` and Alembic migrations in `database/alembic/versions/`.
+
+- Every SQLModel/SQLAlchemy `Relationship()` field must have an explicit scalar foreign-key column on the same model, for example:
+
+  ```python
+  organization_id: int = Field(foreign_key="organizations.id", nullable=False, index=True, ondelete="RESTRICT")
+  organization: Organization = Relationship()
+  ```
+
+- Keep the scalar column available for direct filtering and navigation, configure its nullability and delete behaviour to match the relationship, and include the constraint in the corresponding Alembic migration. Never rely on `Relationship()` alone to enforce referential integrity.
+- Schema changes go through Alembic under `database/`. Export new models in the module's `__all__` and import the module in `database/models/__init__.py`, or autogenerate won't see them.
+- Generate with `uv run alembic revision --autogenerate -m "<imperative description>"` from `<service>/<service>/database` (or `backend/scripts/create_migration.sh <service>` in the dev container), then review: tables, columns, indexes, unique constraints, foreign keys with `ondelete`, seeds/backfills, and a `downgrade()` that reverses `upgrade()`.
+- Apply and test: `uv run alembic -c ./<service>/database/alembic.ini upgrade head`, `downgrade -1`, `upgrade head`.
+- Production images run `alembic upgrade head` on start, so migrations must be safe on existing data.
+- Prefer deactivation (`is_active`) to deleting rows; use `GUIDMixin` and `AuditMixin` like existing models.
+
+Details: `docs/guides/database-migrations.md`, `docs/architecture/data.md`, `docs/standards/backend.md`.

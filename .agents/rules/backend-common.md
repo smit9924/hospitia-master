@@ -1,0 +1,37 @@
+---
+description: Shared rules for every backend service - layout, layering, exceptions, messaging, config, logging, checks
+paths:
+  - "backend/**"
+---
+
+# Backend: all services
+
+FastAPI services in `backend/services/<service>/`, app package `<service>/<service>/` (Python 3.13, uv, SQLModel, Alembic).
+
+## Package map
+
+```text
+<service>/
+├── api/           # HTTP layer: routes/ (endpoints), services/ (business logic), repositories/ (persistence), dependencies.py
+├── core/          # config, security, settings
+├── database/      # Alembic + SQLModel models
+├── doc/           # OpenAPI error-response examples for routes
+├── exceptions/    # definitions/, handlers/, registry.py
+├── handlers/      # message consumers (entry points), handler_routes.py
+├── messaging/     # base abstraction + rabbitmq/
+├── schemas/       # Pydantic request/response/message schemas (BaseSchema, camelCase JSON)
+└── types/         # shared types, enums, constants, error codes
+```
+
+## Rules
+
+- Layering `API routes → services → repositories → models → PostgreSQL`: routes validate input, declare access, call one service and return; no heavy business or DB logic in routes. Repositories own persistence; services own business rules.
+- Declare access with the existing dependencies (`RoleValidationDep`, `ActiveOrganizationDep`, `OrganizationScopedActorDep`, `InternalRequestDep`); never authorize by hand in a route.
+- Exceptions: define in `exceptions/definitions/`, handle in `exceptions/handlers/`, register in `exceptions/registry.py`, document in `doc/` and the route's `responses=`. Raise from services/repositories. Never reuse or renumber an `ErrorCodes` value (ranges: 1xxx shared/auth, 2xxx booking, 3xxx payment, 4xxx dashboard).
+- Messaging: publish/consume through `messaging/` (`get_mq_client()`); never use pika or RabbitMQ clients in business code, handlers or services. Consumers are idempotent and have a dead-letter queue and retry count.
+- Schemas in `schemas/`, constants and enums in `types/`. Expose `guid`s, never integer ids.
+- Settings in `core/config.py`; add every new key to both `.sample.env` and `.sample.cloud-dev.env`. No hard-coded secrets or environment values.
+- Logging: `log = logging.getLogger(__name__)`; never `print`; never log secrets, tokens or OTPs.
+- Check: `uv run ruff check .`. There's no automated test suite; verify endpoints by hand per role. After API changes run `bash scripts/export_openapi.sh` in `hospitia-master`.
+
+Details: `docs/standards/backend.md`, `docs/backend/index.md`, `docs/guides/exceptions-and-error-codes.md`, `docs/guides/messaging.md`.
